@@ -33,8 +33,8 @@ config = RobertaConfig()
 tokenizer = AutoTokenizer.from_pretrained('roberta-base')
 model = RobertaModel.from_pretrained('roberta-base').to(device)
 
-# inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
-# print(inputs)
+inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
+print(inputs['input_ids'].shape)
 # outputs = model(**inputs)
 #
 # last_hidden_states = outputs.last_hidden_state
@@ -44,7 +44,8 @@ train_loader = DataLoader(trainSet,batch_size=3,shuffle=False)
 
 for i in train_loader:
     text,label = i[0].to(device),i[1].to(device)
-    print(text)
+    print(text['input_ids'].shape)
+    quit()
     outputs = model(text['input_ids'],text['attention_mask']).last_hidden_state
     print(outputs.shape)
     quit()
