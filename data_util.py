@@ -19,7 +19,7 @@ class ToxicDataset(Dataset):
             padding="max_length",
             return_tensors="pt",
         )
-        return text,2
+        return text,self.label[idx]
 
 def get_data(df):
     df["spans"] = df.spans.apply(literal_eval)
