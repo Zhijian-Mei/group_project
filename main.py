@@ -1,5 +1,5 @@
 import pandas as pd
-
+import torch
 from data_util import get_data
 
 from transformers import RobertaModel,RobertaConfig,AutoTokenizer
@@ -31,6 +31,8 @@ config = RobertaConfig()
 tokenizer = AutoTokenizer.from_pretrained('roberta-base')
 model = RobertaModel.from_pretrained('roberta-base')
 
-batch_size = 4
+inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
+outputs = model(**inputs)
 
-
+last_hidden_states = outputs.last_hidden_state
+print(last_hidden_states)
