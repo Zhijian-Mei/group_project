@@ -42,5 +42,6 @@ trainSet = ToxicDataset(trainSet,tokenizer)
 train_loader = DataLoader(trainSet,batch_size=3,shuffle=False)
 
 for i in train_loader:
-    print(i)
+    text,label = i[0],i[1]
+    print(label)
     quit()
