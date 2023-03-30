@@ -13,7 +13,7 @@ class ToxicDataset(Dataset):
 
     def __getitem__(self, idx):
         text = self.tokenizer.batch_encode_plus(
-            [self.text[idx]],
+            self.text[idx],
             max_length=512,
             pad_to_max_length=True,
             truncation=True,
