@@ -42,6 +42,4 @@ trainSet = ToxicDataset(trainSet,tokenizer)
 train_loader = DataLoader(trainSet,batch_size=4,shuffle=False)
 
 for i in train_loader:
-
-    print(i)
     quit()
