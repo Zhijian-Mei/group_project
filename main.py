@@ -44,8 +44,6 @@ train_loader = DataLoader(trainSet,batch_size=3,shuffle=False)
 
 for i in train_loader:
     text,label = i[0].to(device),i[1].to(device)
-    print(text['input_ids'].shape)
-    quit()
     outputs = model(text['input_ids'],text['attention_mask']).last_hidden_state
     print(outputs.shape)
     quit()
