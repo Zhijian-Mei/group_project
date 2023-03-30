@@ -1,6 +1,6 @@
 import pandas as pd
 import torch
-from data_util import get_data
+from data_util import get_data,ToxicDataset
 from torch import nn
 from torch.utils.data import DataLoader
 from transformers import RobertaModel,RobertaConfig,AutoTokenizer
@@ -38,7 +38,7 @@ model = RobertaModel.from_pretrained('roberta-base')
 #
 # last_hidden_states = outputs.last_hidden_state
 # print(last_hidden_states.shape)
-
+trainSet = ToxicDataset(trainSet,tokenizer)
 train_loader = DataLoader(trainSet,batch_size=4,shuffle=False)
 
 for i in train_loader:
