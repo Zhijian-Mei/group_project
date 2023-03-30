@@ -1,7 +1,8 @@
 import pandas as pd
 import torch
 from data_util import get_data
-
+from torch import nn
+from torch.utils.data import DataLoader
 from transformers import RobertaModel,RobertaConfig,AutoTokenizer
 train = pd.read_csv('data/tsd_train.csv')
 eval = pd.read_csv('data/tsd_trial.csv')
@@ -31,8 +32,16 @@ config = RobertaConfig()
 tokenizer = AutoTokenizer.from_pretrained('roberta-base')
 model = RobertaModel.from_pretrained('roberta-base')
 
-inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
-outputs = model(**inputs)
+# inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
+# print(inputs)
+# outputs = model(**inputs)
+#
+# last_hidden_states = outputs.last_hidden_state
+# print(last_hidden_states.shape)
 
-last_hidden_states = outputs.last_hidden_state
-print(last_hidden_states.shape)
+train_loader = DataLoader(trainSet,batch_size=4,shuffle=False)
+
+for i in train_loader:
+
+    print(i)
+    quit()
