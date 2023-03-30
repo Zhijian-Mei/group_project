@@ -24,7 +24,6 @@ class ToxicDataset(Dataset):
 def get_data(df):
     df["spans"] = df.spans.apply(literal_eval)
     for i in trange(len(df)):
-        text = df['text'][i]
         spans = df['spans'][i]
         # label = [0 for _ in range(len(text))]
         label = [0 for _ in range(2048)]
