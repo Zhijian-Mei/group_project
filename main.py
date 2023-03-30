@@ -43,6 +43,5 @@ train_loader = DataLoader(trainSet,batch_size=2,shuffle=False)
 
 for i in train_loader:
     text,label = i
-    print(text)
     print(label)
     quit()
