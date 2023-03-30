@@ -1,4 +1,6 @@
 from ast import literal_eval
+
+import torch
 from torch.utils.data import Dataset
 from torch import FloatTensor
 from tqdm import trange
@@ -13,13 +15,14 @@ class ToxicDataset(Dataset):
 
     def __getitem__(self, idx):
         text = self.tokenizer.batch_encode_plus(
-            self.text[idx],
+            [self.text[idx]],
             max_length=512,
             pad_to_max_length=True,
             truncation=True,
             padding="max_length",
             return_tensors="pt",
         )
+        text['input_ids'] = torch.squeeze(text['input_ids'])
         label = FloatTensor(self.label[idx])
         return text,label
 

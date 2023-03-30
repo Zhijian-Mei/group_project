@@ -33,8 +33,8 @@ config = RobertaConfig()
 tokenizer = AutoTokenizer.from_pretrained('roberta-base')
 model = RobertaModel.from_pretrained('roberta-base').to(device)
 
-inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
-print(inputs['input_ids'].shape)
+# inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
+# print(inputs['input_ids'].shape)
 # outputs = model(**inputs)
 #
 # last_hidden_states = outputs.last_hidden_state
