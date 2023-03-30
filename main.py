@@ -1,9 +1,10 @@
 import pandas as pd
 import torch
 from data_util import get_data,ToxicDataset
-from torch import nn
+from torch import nn,cuda
 from torch.utils.data import DataLoader
 from transformers import RobertaModel,RobertaConfig,AutoTokenizer
+device = torch.device('cuda:0' if cuda.is_available() else 'cpu')
 train = pd.read_csv('data/tsd_train.csv')
 eval = pd.read_csv('data/tsd_trial.csv')
 test = pd.read_csv('data/tsd_test.csv')
@@ -42,6 +43,7 @@ trainSet = ToxicDataset(trainSet,tokenizer)
 train_loader = DataLoader(trainSet,batch_size=3,shuffle=False)
 
 for i in train_loader:
-    text,label = i[0],i[1]
-    print(label.shape)
+    text,label = i[0].to(device),i[1].to(device)
+    outputs = model(**text).last_hidden_state
+    print(outputs.shape)
     quit()
