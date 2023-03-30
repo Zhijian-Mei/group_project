@@ -5,8 +5,6 @@ from tqdm import trange
 class ToxicDataset(Dataset):
     def __init__(self,df,tokenizer):
         self.text = df['text']
-        print(self.text)
-        quit()
         self.label = df['spans']
         self.tokenizer = tokenizer
     def __len__(self):
