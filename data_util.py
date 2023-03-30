@@ -1,5 +1,6 @@
 from ast import literal_eval
 from torch.utils.data import Dataset
+from torch import FloatTensor
 from tqdm import trange
 
 class ToxicDataset(Dataset):
@@ -19,7 +20,8 @@ class ToxicDataset(Dataset):
             padding="max_length",
             return_tensors="pt",
         )
-        return text,self.label[idx]
+        label = FloatTensor(self.label[idx])
+        return text,label
 
 def get_data(df):
     df["spans"] = df.spans.apply(literal_eval)
