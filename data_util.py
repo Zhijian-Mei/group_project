@@ -4,8 +4,8 @@ from tqdm import trange
 
 class ToxicDataset(Dataset):
     def __init__(self,df,tokenizer):
-        self.text = df['text']
-        self.label = df['spans']
+        self.text = list(df['text'])
+        self.label = list(df['spans'])
         self.tokenizer = tokenizer
     def __len__(self):
         return len(self.text)
@@ -19,7 +19,7 @@ class ToxicDataset(Dataset):
             padding="max_length",
             return_tensors="pt",
         )
-        return text,self.label[idx]
+        return text,2
 
 def get_data(df):
     df["spans"] = df.spans.apply(literal_eval)

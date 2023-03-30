@@ -41,4 +41,6 @@ model = RobertaModel.from_pretrained('roberta-base')
 trainSet = ToxicDataset(trainSet,tokenizer)
 train_loader = DataLoader(trainSet,batch_size=1,shuffle=False)
 
-print(train_loader[0])
+for i in train_loader:
+    print(i)
+    quit()
