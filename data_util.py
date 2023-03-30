@@ -6,6 +6,9 @@ class ToxicDataset(Dataset):
     def __init__(self,df,tokenizer):
         self.text = df['text']
         self.label = df['spans']
+        print(self.label)
+        print(self.label[0])
+        quit()
         self.tokenizer = tokenizer
     def __len__(self):
         return len(self.text)
