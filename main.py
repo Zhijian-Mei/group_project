@@ -60,7 +60,7 @@ eval_loader = DataLoader(evalSet, batch_size=eval_batch_size)
 epoch = 10
 global_step = 0
 labels_to_ids = {'T':1,'NT':0}
-ids_to_labels = {1:'T','NT':0}
+ids_to_labels = {1:'T',0:'NT'}
 for e in range(epoch):
     model.train()
     for i in tqdm(train_loader):
@@ -93,7 +93,7 @@ for e in range(epoch):
                         break
             golden_labels.append(label_for_token)
         golden_labels = torch.LongTensor(golden_labels).to(device)
-        print(golden_labels)
+        print(golden_labels.shape)
         quit()
         loss, logits = model(**input_encoding,labels=golden_labels)
         print(loss)
