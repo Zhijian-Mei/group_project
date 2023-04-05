@@ -27,6 +27,7 @@ class ToxicDataset(Dataset):
         print(text['input_ids'].shape)
         text['input_ids'] = torch.squeeze(text['input_ids'])
         print(text['input_ids'].shape)
+        quit()
         label = FloatTensor(self.label[idx])
         return text,label
 
