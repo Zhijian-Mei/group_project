@@ -57,23 +57,28 @@ eval_loader = DataLoader(evalSet, batch_size=1)
 
 epoch = 10
 global_step = 0
+max_length = 256
 for e in range(epoch):
     model.train()
     for i in tqdm(train_loader):
         text, label = i[0], i[1].to(device)
         input_encoding = tokenizer.batch_encode_plus(
             text,
-            max_length=256,
+            max_length=max_length,
             pad_to_max_length=True,
             truncation=True,
             padding="max_length",
             return_tensors="pt",
         ).to(device)
 
-        # golden_label = []
-        # for j in range(input_encoding['input_ids'].shape[0]):
-        #     label_row = [0 for ]
-        #     for k in range(input_encoding['input_ids'].shape[1]):
+        golden_label = []
+        for j in range(input_encoding['input_ids'].shape[0]):
+            label_row = [0 for _ in range(max_length)]
+            for k in range(max_length):
+                if input_encoding.token_to_chars(j,k) is None and k != 0:
+                    break
+                start,end = input_encoding.token_to_chars(j,k)
+                for position in label[j]:
 
         print(input_encoding.words(0))
         print(input_encoding.tokens(0))
