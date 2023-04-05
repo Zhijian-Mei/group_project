@@ -73,7 +73,7 @@ for e in range(epoch):
 
         golden_labels = []
         for j in range(train_batch_size):
-            label_for_token = [0 for _ in range(max_length)]
+            label_for_token = [[0,1] for _ in range(max_length)]
             for k in range(1,max_length):
                 if input_encoding.token_to_chars(j,k) is None:
                     continue
@@ -82,19 +82,15 @@ for e in range(epoch):
                     if position == -100:
                         break
                     if start <= position < end:
-                        label_for_token[k] = 1
+                        label_for_token[k] = [1,0]
                         break
             golden_labels.append(label_for_token)
-        print(golden_labels)
-        print(label)
-        quit()
-
-        print(input_encoding.words(0))
-        print(input_encoding.tokens(0))
-        print(input_encoding.token_to_chars(0,100))
-        quit()
+        golden_labels = torch.FloatTensor(golden_labels).to(device)
         output = model(input_encoding)
-        loss = loss_f(output, label)
+        print(output.shape)
+        print(golden_labels.shape)
+        quit()
+        loss = loss_f(output, golden_labels)
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
