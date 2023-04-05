@@ -44,7 +44,7 @@ optimizer = torch.optim.AdamW(model.parameters())
 # last_hidden_states = outputs.last_hidden_state
 # print(last_hidden_states.shape)
 trainSet = ToxicDataset(trainSet,tokenizer)
-train_loader = DataLoader(trainSet,batch_size=3,shuffle=False)
+train_loader = DataLoader(trainSet,batch_size=20,shuffle=False)
 
 model.train()
 
