@@ -44,15 +44,27 @@ optimizer = torch.optim.AdamW(model.parameters())
 # last_hidden_states = outputs.last_hidden_state
 # print(last_hidden_states.shape)
 trainSet = ToxicDataset(trainSet,tokenizer)
-train_loader = DataLoader(trainSet,batch_size=8,shuffle=False,num_workers=8)
+train_loader = DataLoader(trainSet,batch_size=8,shuffle=False)
+eval_loader = DataLoader(evalSet,batch_size=8)
+epoch = 10
+for e in range(epoch):
+    model.train()
+    for i in train_loader:
+        text,label = i[0].to(device),i[1].to(device)
+        output = model(text)
+        loss = loss_f(output,label)
+        print(loss.item())
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        break
 
-model.train()
+    model.eval()
+    for i in eval_loader:
+        text, label = i[0].to(device), i[1]
+        output = model(text)
+        print(output.shape)
+        quit()
 
-for i in train_loader:
-    text,label = i[0].to(device),i[1].to(device)
-    output = model(text)
-    loss = loss_f(output,label)
-    print(loss)
-    optimizer.zero_grad()
-    loss.backward()
-    optimizer.step()
+
+
