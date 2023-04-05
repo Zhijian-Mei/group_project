@@ -51,8 +51,8 @@ optimizer = torch.optim.AdamW(model.parameters(),lr=0.001)
 # print(last_hidden_states.shape)
 trainSet = ToxicDataset(trainSet, tokenizer)
 evalSet = ToxicDataset(evalSet, tokenizer)
-
-train_loader = DataLoader(trainSet, batch_size=4, shuffle=False)
+train_batch_size = 2
+train_loader = DataLoader(trainSet, batch_size =train_batch_size, shuffle=False)
 eval_loader = DataLoader(evalSet, batch_size=1)
 
 epoch = 10
@@ -71,15 +71,24 @@ for e in range(epoch):
             return_tensors="pt",
         ).to(device)
 
-        golden_label = []
-        for j in range(input_encoding['input_ids'].shape[0]):
-            label_row = [0 for _ in range(max_length)]
-            for k in range(max_length):
-                if input_encoding.token_to_chars(j,k) is None and k != 0:
-                    break
+        golden_labels = []
+        for j in range(train_batch_size):
+            label_for_token = [0 for _ in range(max_length)]
+            for k in range(1,max_length):
+                if input_encoding.token_to_chars(j,k) is None:
+                    continue
                 start,end = input_encoding.token_to_chars(j,k)
                 for position in label[j]:
-                    pass
+                    if position == -100:
+                        break
+                    if start <= position < end:
+                        label_for_token[k] = 1
+                        break
+            golden_labels.append(label_for_token)
+        print(golden_labels)
+        print(label)
+        quit()
+
         print(input_encoding.words(0))
         print(input_encoding.tokens(0))
         print(input_encoding.token_to_chars(0,100))

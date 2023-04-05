@@ -21,14 +21,12 @@ class ToxicDataset(Dataset):
 
 def get_data(df,mode='train'):
     df["spans"] = df.spans.apply(literal_eval)
-    print(df['spans'])
-    quit()
     if mode == 'train':
         for i in trange(len(df)):
             spans = df['spans'][i]
             # label = [0 for _ in range(len(text))]
-            label_for_train = [[0,1] for _ in range(512)]
-            for toxic_position in spans:
-                label_for_train[toxic_position] = [1,0]
+            label_for_train = [-100 for _ in range(512)]
+            for j in range(len(spans)):
+                label_for_train[j] = spans[j]
             df['spans'][i] = label_for_train
     return df
