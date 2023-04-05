@@ -69,7 +69,7 @@ for e in range(epoch):
             return_tensors="pt",
         ).to(device)
         print(text.tokens())
-        print(text.word_to_chars(0,0))
+        print(text.word_to_chars())
         quit()
         output = model(text)
         loss = loss_f(output, label)
