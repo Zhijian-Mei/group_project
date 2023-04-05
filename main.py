@@ -78,6 +78,7 @@ for e in range(epoch):
         output = torch.max(output, dim=-1)[1][0]
         result = []
         for j in range(len(output)):
+            print(output[j].item())
             if output[j].item() == 0:
                 result.append(j)
         f1score += f1(result, label)
