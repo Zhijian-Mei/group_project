@@ -84,4 +84,4 @@ for e in range(epoch):
         count += 1
         f1score = f1score / count
         print('f1_score: ', f1score)
-        quit()
+    quit()
