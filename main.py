@@ -67,7 +67,7 @@ for e in range(epoch):
         global_step+=1
         if global_step % 200 == 0:
             print('loss: ', loss.item())
-
+        break
 
     f1score = 0
     count = 0
@@ -78,7 +78,7 @@ for e in range(epoch):
         output = torch.max(output, dim=-1)[0]
         result = []
         for j in range(len(output)):
-            if output[j] == 0:
+            if output[j].item() == 0:
                 result.append(j)
         f1score += f1(result, label)
         count += 1
