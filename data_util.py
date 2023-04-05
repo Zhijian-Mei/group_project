@@ -21,11 +21,11 @@ class ToxicDataset(Dataset):
 
 def get_data(df,mode='train'):
     df["spans"] = df.spans.apply(literal_eval)
-    print(max(df['spans'],lambda x:len(x)))
-    quit()
     if mode == 'train':
         for i in trange(len(df)):
             spans = df['spans'][i]
+            if len(spans) > 1024:
+                print(len(spans))
             # label = [0 for _ in range(len(text))]
             label_for_train = [-100 for _ in range(1024)]
             for j in range(len(spans)):
