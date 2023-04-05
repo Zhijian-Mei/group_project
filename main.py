@@ -67,7 +67,7 @@ for e in range(epoch):
         global_step+=1
         if global_step % 200 == 0:
             print('loss: ', loss.item())
-        break
+
 
     f1score = 0
     count = 0
