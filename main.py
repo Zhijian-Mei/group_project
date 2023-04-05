@@ -51,6 +51,6 @@ for i in train_loader:
     outputs = model(text)
     print(outputs.shape)
     print(label.shape)
-    loss = loss_f(outputs,label)
+    loss = loss_f(torch.reshape(outputs,(outputs.shape[0],outputs.shape[2],outputs.shape[1])),label)
     print(loss)
-    quit() 
+    quit()
