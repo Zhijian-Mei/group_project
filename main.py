@@ -4,6 +4,7 @@ from data_util import get_data,ToxicDataset
 from torch import nn,cuda
 from torch.utils.data import DataLoader
 from transformers import RobertaModel,RobertaConfig,AutoTokenizer
+from model import RobertaMLP
 device = torch.device('cuda:0' if cuda.is_available() else 'cpu')
 
 
@@ -31,10 +32,10 @@ testSet = get_data(test)
 #         max_length = len(testSet['text'][i].split())
 # print(max_length)
 config = RobertaConfig()
-
+print(config)
 tokenizer = AutoTokenizer.from_pretrained('roberta-base')
-model = RobertaModel.from_pretrained('roberta-base').to(device)
-
+Roberta_model = RobertaModel.from_pretrained('roberta-base').to(device)
+# model = RobertaMLP(Roberta_model,config)
 # inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
 # print(inputs['input_ids'].shape)
 # outputs = model(**inputs)
@@ -47,6 +48,6 @@ train_loader = DataLoader(trainSet,batch_size=3,shuffle=False)
 
 for i in train_loader:
     text,label = i[0].to(device),i[1].to(device)
-    outputs = model(text['input_ids'],text['attention_mask']).last_hidden_state
+    outputs = Roberta_model(text['input_ids'],text['attention_mask']).last_hidden_state
     print(outputs.shape)
     quit()
