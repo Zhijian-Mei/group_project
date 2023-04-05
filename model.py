@@ -8,11 +8,11 @@ class RobertaMLP(nn.Module):
         self.output = nn.ModuleList([
             nn.Linear(config.hidden_size,config.hidden_size*2),
             nn.Linear(config.hidden_size*2,2)
-                                    ]
-                                    )
+                                    ])
 
 
     def forward(self,text):
         x = self.model(text['input_ids'],text['attention_mask']).last_hidden_state
-        output = self.output(x)
-        return output
+        for module in self.output:
+            x = module(x)
+        return x
