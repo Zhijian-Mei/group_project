@@ -69,8 +69,8 @@ for e in range(epoch):
         print(output.shape)
         print(output)
         output = torch.max(output,dim=-1)
-        print(output.shape)
-        print(output)
+        print(output[0].shape)
+        print(output[1])
         quit()
 
 
