@@ -21,7 +21,7 @@ test = pd.read_csv('data/tsd_test.csv')
 print('loading train data')
 trainSet = get_data(train)
 print('loading eval data')
-evalSet = get_data(eval,mode='eval')
+evalSet = get_data(eval, mode='eval')
 # print('loading test data')
 # testSet = get_data(test)
 # max_length = 0
@@ -54,17 +54,19 @@ train_loader = DataLoader(trainSet, batch_size=8, shuffle=False)
 eval_loader = DataLoader(evalSet, batch_size=1)
 
 epoch = 10
+global_step = 0
 for e in range(epoch):
     model.train()
     for i in tqdm(train_loader):
         text, label = i[0].to(device), i[1].to(device)
         output = model(text)
         loss = loss_f(output, label)
-        print(loss.item())
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-        break
+        global_step+=1
+        if global_step % 200 == 0:
+            print('loss: ', loss.item())
 
     f1score = 0
     count = 0
@@ -73,14 +75,12 @@ for e in range(epoch):
         text, label = i[0].to(device), i[1]
         output = model(text)
         output = torch.max(output, dim=-1)
-        for o in output[1]:
-            result = []
-            for j in range(len(o)):
-                if o[j].item() == 0:
-                    result.append(j)
-            f1score += f1(result,label)
-            count+=1
+        result = []
+        print(output)
+        quit()
+        f1score += f1(result, label)
+        count += 1
         print(label)
-        f1score = f1score/count
-        print('f1_score: ',f1score)
+        f1score = f1score / count
+        print('f1_score: ', f1score)
         quit()
