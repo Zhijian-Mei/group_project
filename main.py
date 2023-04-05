@@ -67,6 +67,9 @@ for e in range(epoch):
         text, label = i[0].to(device), i[1]
         output = model(text)
         print(output.shape)
+        print(output)
+        output = torch.max(output,dim=-1)
+        print(output)
         quit()
 
 
