@@ -23,7 +23,7 @@ class ToxicDataset(Dataset):
             padding="max_length",
             return_tensors="pt",
         )
-        print(text.token_to_chars(idx))
+        print(text.token_to_chars())
         quit()
         text['input_ids'] = torch.squeeze(text['input_ids'])
         label = FloatTensor(self.label[idx])
