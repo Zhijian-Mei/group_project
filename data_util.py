@@ -7,17 +7,26 @@ from tqdm import trange
 from transformers import BatchEncoding
 
 class ToxicDataset(Dataset):
-    def __init__(self,df,tokenizer):
+    def __init__(self,df,tokenizer,max_length=256):
         self.text = list(df['text'])
         self.label = list(df['spans'])
         self.tokenizer = tokenizer
+        self.max_length = max_length
     def __len__(self):
         return len(self.text)
 
     def __getitem__(self, idx):
         text = self.text[idx]
+        input_encoding = self.tokenizer.batch_encode_plus(
+            text,
+            max_length=self.max_length,
+            pad_to_max_length=True,
+            truncation=True,
+            padding="max_length",
+            return_tensors="pt",
+        )
         label = FloatTensor(self.label[idx])
-        return text,label
+        return input_encoding,label
 
 def get_data(df,mode='train'):
     df["spans"] = df.spans.apply(literal_eval)

@@ -22,7 +22,7 @@ test = pd.read_csv('data/tsd_test.csv')
 print('loading train data')
 trainSet = get_data(train)
 print('loading eval data')
-evalSet = get_data(eval, mode='eval')
+evalSet = get_data(eval)
 print('loading test data')
 # testSet = get_data(test,mode='eval')
 # max_length = 0
@@ -49,7 +49,8 @@ optimizer = torch.optim.AdamW(model.parameters(),lr=0.001)
 #
 # last_hidden_states = outputs.last_hidden_state
 # print(last_hidden_states.shape)
-trainSet = ToxicDataset(trainSet, tokenizer)
+max_length = 256
+trainSet = ToxicDataset(trainSet, tokenizer,max_length)
 evalSet = ToxicDataset(evalSet, tokenizer)
 train_batch_size = 4
 train_loader = DataLoader(trainSet, batch_size =train_batch_size, shuffle=False)
@@ -57,20 +58,13 @@ eval_loader = DataLoader(evalSet, batch_size=1)
 
 epoch = 10
 global_step = 0
-max_length = 256
+
 for e in range(epoch):
     model.train()
     for i in tqdm(train_loader):
-        text, label = i[0], i[1].to(device)
-        input_encoding = tokenizer.batch_encode_plus(
-            text,
-            max_length=max_length,
-            pad_to_max_length=True,
-            truncation=True,
-            padding="max_length",
-            return_tensors="pt",
-        ).to(device)
-
+        input_encoding, label = i[0].to(device), i[1].to(device)
+        print(input_encoding.shape)
+        quit()
         golden_labels = []
         for j in range(train_batch_size):
             label_for_token = [[0,1] for _ in range(max_length)]
@@ -100,7 +94,15 @@ for e in range(epoch):
     count = 0
     model.eval()
     for i in tqdm(eval_loader):
-        text, label = i[0].to(device), i[1]
+        text, label = i[0], i[1]
+        input_encoding = tokenizer.batch_encode_plus(
+            text,
+            max_length=max_length,
+            pad_to_max_length=True,
+            truncation=True,
+            padding="max_length",
+            return_tensors="pt",
+        ).to(device)
         output = model(text)
         output = torch.max(output, dim=-1)[1][0]
         result = []
@@ -110,6 +112,7 @@ for e in range(epoch):
                 result.append(j)
         f1score += f1(result, label)
         count += 1
+
         print(result)
         print()
     f1score = f1score / count
