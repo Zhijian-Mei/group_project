@@ -51,6 +51,7 @@ model.train()
 for i in train_loader:
     text,label = i[0].to(device),i[1].to(device).to(torch.long)
     output = model(text)
+    print(output)
     loss = loss_f(torch.reshape(output,(output.shape[0],output.shape[2],output.shape[1])),label)
     print(loss)
     optimizer.zero_grad()
