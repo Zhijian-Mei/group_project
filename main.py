@@ -82,6 +82,9 @@ for e in range(epoch):
                 result.append(j)
         f1score += f1(result, label)
         count += 1
+        print(result)
+        print(label)
+        print()
     f1score = f1score / count
     print('f1_score: ', f1score)
-    quit()
+
