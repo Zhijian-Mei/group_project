@@ -62,14 +62,14 @@ for e in range(epoch):
         text, label = i[0], i[1].to(device)
         text = tokenizer.batch_encode_plus(
             text,
-            max_length=512,
+            max_length=128,
             pad_to_max_length=True,
             truncation=True,
             padding="max_length",
             return_tensors="pt",
         ).to(device)
-        print(text.tokens())
-        print(text.word_to_chars())
+        print(text.word_to_chars(1,2))
+        print(text.word_to_chars(1,2)[0])
         quit()
         output = model(text)
         loss = loss_f(output, label)
