@@ -95,14 +95,13 @@ for e in range(epoch):
         golden_labels = torch.LongTensor(golden_labels).to(device)
         output = model(**input_encoding,labels=golden_labels)
         loss = output.loss
-        print(loss.item())
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
         global_step += 1
         if global_step % 100 == 0:
             print('loss: ', loss.item())
-            break
+
 
     f1score = 0
     count = 0
@@ -120,13 +119,11 @@ for e in range(epoch):
 
         logits = model(**input_encoding).logits
         predicted_token_class_ids = logits.argmax(-1)
-        print(predicted_token_class_ids)
-        quit()
         predicted_labels = []
         for j in range(input_encoding['input_ids'].shape[0]):
             label_for_char = []
             for k in range(1, max_length):
-                if output[j][k] == 1:
+                if predicted_token_class_ids[j][k] == 1:
                     start, end = input_encoding.token_to_chars(j, k)
                     for position in range(start, end):
                         label_for_char.append(position)
@@ -134,8 +131,7 @@ for e in range(epoch):
 
         print(predicted_labels)
         for i in range(len(predicted_labels)):
-            lab = filter(lambda x:x != -1,label[i])
-            f1score += f1(predicted_labels[i], lab)
+            f1score += f1(predicted_labels[i], predicted_labels[i])
             count += 1
 
     f1score = f1score / count
