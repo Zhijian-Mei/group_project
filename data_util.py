@@ -21,7 +21,7 @@ class ToxicDataset(Dataset):
 
 def get_data(df,mode='train'):
     df["spans"] = df.spans.apply(literal_eval)
-    print(df['spans'].value)
+    print(df['spans'])
     quit()
     if mode == 'train':
         for i in trange(len(df)):
