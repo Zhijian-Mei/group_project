@@ -76,6 +76,7 @@ for e in range(epoch):
         text, label = i[0].to(device), i[1]
         output = model(text)
         output = torch.max(output, dim=-1)[0]
+        print(output)
         result = []
         for j in range(len(output)):
             if output[j].item() == 0:
