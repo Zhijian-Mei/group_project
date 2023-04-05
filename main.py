@@ -7,6 +7,7 @@ from data_util import get_data, ToxicDataset
 from torch import nn, cuda
 from torch.utils.data import DataLoader
 from transformers import RobertaModel, RobertaConfig, AutoTokenizer
+from transformers import AutoConfig, AutoModelForTokenClassification
 from model import RobertaMLP
 from evaluation import f1
 
@@ -40,7 +41,7 @@ tokenizer = AutoTokenizer.from_pretrained('roberta-base')
 Roberta_model = RobertaModel.from_pretrained('roberta-base').to(device)
 model = RobertaMLP(Roberta_model, config).to(device)
 loss_f = nn.BCEWithLogitsLoss()
-optimizer = torch.optim.AdamW(model.parameters())
+optimizer = torch.optim.AdamW(model.parameters(),lr=0.001)
 # inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
 # print(inputs['input_ids'].shape)
 # outputs = model(**inputs)
@@ -50,7 +51,7 @@ optimizer = torch.optim.AdamW(model.parameters())
 trainSet = ToxicDataset(trainSet, tokenizer)
 evalSet = ToxicDataset(evalSet, tokenizer)
 
-train_loader = DataLoader(trainSet, batch_size=8, shuffle=False)
+train_loader = DataLoader(trainSet, batch_size=2, shuffle=False)
 eval_loader = DataLoader(evalSet, batch_size=1)
 
 epoch = 10
