@@ -75,7 +75,7 @@ for e in range(epoch):
     for i in tqdm(eval_loader):
         text, label = i[0].to(device), i[1]
         output = model(text)
-        output = torch.max(output, dim=-1)[1][0].item()
+        output = torch.max(output, dim=-1)[1][0]
         print(output)
         quit()
         result = []
