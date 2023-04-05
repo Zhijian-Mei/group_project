@@ -1,10 +1,14 @@
+import numpy as np
 import pandas as pd
 import torch
+from tqdm import tqdm
+
 from data_util import get_data, ToxicDataset
 from torch import nn, cuda
 from torch.utils.data import DataLoader
 from transformers import RobertaModel, RobertaConfig, AutoTokenizer
 from model import RobertaMLP
+from evaluation import f1
 
 device = torch.device('cuda:0' if cuda.is_available() else 'cpu')
 
@@ -52,7 +56,7 @@ eval_loader = DataLoader(evalSet, batch_size=8)
 epoch = 10
 for e in range(epoch):
     model.train()
-    for i in train_loader:
+    for i in tqdm(train_loader):
         text, label = i[0].to(device), i[1].to(device)
         output = model(text)
         loss = loss_f(output, label)
@@ -60,15 +64,19 @@ for e in range(epoch):
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-
+        break
 
     model.eval()
-    for i in eval_loader:
+    for i in tqdm(eval_loader):
         text, label = i[0].to(device), i[1]
         output = model(text)
-        print(output.shape)
-        print(output)
         output = torch.max(output, dim=-1)
+        for o in output[1]:
+            result = []
+            print(o)
+            for j in range(len(o)):
+                print(o[j])
+                if o[j] == 0:
+                    result.append(j)
         print(output[0].shape)
-        print(output[1][output[1] == 0])
         quit()
