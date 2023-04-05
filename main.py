@@ -79,7 +79,7 @@ for e in range(epoch):
                     break
                 start,end = input_encoding.token_to_chars(j,k)
                 for position in label[j]:
-
+                    pass
         print(input_encoding.words(0))
         print(input_encoding.tokens(0))
         print(input_encoding.token_to_chars(0,100))
