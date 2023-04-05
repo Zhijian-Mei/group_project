@@ -1,4 +1,4 @@
-
+import torch
 from torch import nn
 
 class RobertaMLP(nn.Module):
@@ -14,6 +14,8 @@ class RobertaMLP(nn.Module):
 
     def forward(self,text):
         x = self.model(text['input_ids'],text['attention_mask']).last_hidden_state
+        print(x.shape)
+        x = torch.reshape(x,(x.shape[0],x.shape[2],x.shape[1]))
         print(x.shape)
         x = self.token_to_character(x)
         print(x.shape)
