@@ -7,8 +7,7 @@ class RobertaMLP(nn.Module):
         self.model = Roberta_model
         self.token_to_character = nn.Linear(512,1024)
         self.output = nn.ModuleList([
-            nn.Linear(config.hidden_size,config.hidden_size*2),
-            nn.Linear(config.hidden_size*2,2)
+            nn.Linear(config.hidden_size,2)
                                     ])
 
 
