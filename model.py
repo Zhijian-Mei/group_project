@@ -19,5 +19,5 @@ class RobertaMLP(nn.Module):
         x = torch.reshape(x, (x.shape[0], x.shape[2], x.shape[1]))
         for module in self.output:
             x = module(x)
-        x = self.sigmoid(x)
+
         return x
