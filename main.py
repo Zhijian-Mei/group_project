@@ -46,6 +46,8 @@ optimizer = torch.optim.AdamW(model.parameters())
 trainSet = ToxicDataset(trainSet,tokenizer)
 train_loader = DataLoader(trainSet,batch_size=8,shuffle=False)
 eval_loader = DataLoader(evalSet,batch_size=8)
+print(eval_loader[0])
+quit()
 epoch = 10
 for e in range(epoch):
     model.train()
