@@ -11,7 +11,7 @@ class ToxicDataset(Dataset):
         self.text = list(df['text'])
         self.label = list(df['spans'])
         self.tokenizer = tokenizer
-        self.batchEncoding = None
+        self.batchEncoding = BatchEncoding
     def __len__(self):
         return len(self.text)
 
@@ -25,7 +25,7 @@ class ToxicDataset(Dataset):
             return_tensors="pt",
         )
         self.batchEncoding = BatchEncoding(text)
-        print(self.batchEncoding.token_to_chars())
+        print(self.batchEncoding.token_to_chars(text['input_ids']))
         quit()
         text['input_ids'] = torch.squeeze(text['input_ids'])
         label = FloatTensor(self.label[idx])
