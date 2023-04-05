@@ -20,17 +20,17 @@ print('loading eval data')
 evalSet = get_data(eval)
 print('loading test data')
 testSet = get_data(test)
-# max_length = 0
-# for i in range(len(trainSet)):
-#     if len(trainSet['text'][i].split()) > max_length:
-#         max_length = len(trainSet['text'][i].split())
-# for i in range(len(evalSet)):
-#     if len(evalSet['text'][i].split()) > max_length:
-#         max_length = len(evalSet['text'][i].split())
-# for i in range(len(testSet)):
-#     if len(testSet['text'][i].split()) > max_length:
-#         max_length = len(testSet['text'][i].split())
-# print(max_length)
+max_length = 0
+for i in range(len(trainSet)):
+    if len(trainSet['text'][i].split()) > max_length:
+        max_length = len(trainSet['text'][i])
+for i in range(len(evalSet)):
+    if len(evalSet['text'][i].split()) > max_length:
+        max_length = len(evalSet['text'][i])
+for i in range(len(testSet)):
+    if len(testSet['text'][i].split()) > max_length:
+        max_length = len(testSet['text'][i])
+print(max_length)
 config = RobertaConfig()
 tokenizer = AutoTokenizer.from_pretrained('roberta-base')
 Roberta_model = RobertaModel.from_pretrained('roberta-base').to(device)
@@ -49,7 +49,7 @@ train_loader = DataLoader(trainSet,batch_size=8,shuffle=False)
 model.train()
 
 for i in train_loader:
-    text,label = i[0].to(device),i[1].to(device).to(torch.long)
+    text,label = i[0].to(device),i[1].to(device)
     output = model(text)
     loss = loss_f(output,label)
     print(loss)
