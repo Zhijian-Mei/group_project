@@ -51,7 +51,7 @@ optimizer = torch.optim.AdamW(model.parameters(),lr=0.001)
 trainSet = ToxicDataset(trainSet, tokenizer)
 evalSet = ToxicDataset(evalSet, tokenizer)
 
-train_loader = DataLoader(trainSet, batch_size=2, shuffle=False)
+train_loader = DataLoader(trainSet, batch_size=4, shuffle=False)
 eval_loader = DataLoader(evalSet, batch_size=1)
 
 epoch = 10
@@ -60,6 +60,8 @@ for e in range(epoch):
     model.train()
     for i in tqdm(train_loader):
         text, label = i[0].to(device), i[1].to(device)
+        print(text)
+        quit()
         output = model(text)
         loss = loss_f(output, label)
         optimizer.zero_grad()
