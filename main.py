@@ -6,7 +6,7 @@ from tqdm import tqdm
 from data_util import get_data, ToxicDataset
 from torch import nn, cuda
 from torch.utils.data import DataLoader
-from transformers import RobertaModel, RobertaConfig, AutoTokenizer
+from transformers import RobertaModel, RobertaConfig, AutoTokenizer, BertForTokenClassification
 from transformers import AutoConfig, AutoModelForTokenClassification
 from model import RobertaMLP
 from evaluation import f1
@@ -38,9 +38,9 @@ evalSet = get_data(eval)
 # print(max_length)
 # quit()
 config = RobertaConfig()
-tokenizer = AutoTokenizer.from_pretrained('roberta-base')
-Roberta_model = RobertaModel.from_pretrained('roberta-base').to(device)
-model = RobertaMLP(Roberta_model, config).to(device)
+tokenizer = AutoTokenizer.from_pretrained('bert-base-cased')
+model = BertForTokenClassification.from_pretrained('bert-base-cased').to(device)
+# model = RobertaMLP(model, config).to(device)
 loss_f = nn.BCEWithLogitsLoss()
 optimizer = torch.optim.AdamW(model.parameters(), lr=0.001)
 # inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
@@ -59,7 +59,8 @@ eval_loader = DataLoader(evalSet, batch_size=eval_batch_size)
 
 epoch = 10
 global_step = 0
-
+labels_to_ids = {'T':1,'NT':0}
+ids_to_labels = {1:'T','NT':0}
 for e in range(epoch):
     model.train()
     for i in tqdm(train_loader):
@@ -72,11 +73,17 @@ for e in range(epoch):
             padding="max_length",
             return_tensors="pt",
         ).to(device)
-
+        print(input_encoding['attention_mask'])
+        quit()
+        attention_mask = input_encoding['attention_mask']
         golden_labels = []
         for j in range(input_encoding['input_ids'].shape[0]):
-            label_for_token = [[1, 0] for _ in range(max_length)]
+            label_for_token = [-100 for _ in range(max_length)]
             for k in range(1, max_length):
+                if attention_mask[j][k] == 1:
+                    label_for_token[k] = 0
+                else:
+                    break
                 if input_encoding.token_to_chars(j, k) is None:
                     continue
                 start, end = input_encoding.token_to_chars(j, k)
@@ -84,7 +91,7 @@ for e in range(epoch):
                     if position == -1:
                         break
                     if start <= position < end:
-                        label_for_token[k] = [0, 1]
+                        label_for_token[k] = 1
                         break
             golden_labels.append(label_for_token)
         golden_labels = torch.FloatTensor(golden_labels).to(device)
@@ -103,7 +110,6 @@ for e in range(epoch):
     model.eval()
     for i in tqdm(eval_loader):
         text, label = i[0], i[1]
-        label = filter(lambda x: x == -1, label)
         input_encoding = tokenizer.batch_encode_plus(
             text,
             max_length=max_length,
@@ -125,10 +131,11 @@ for e in range(epoch):
                     for position in range(start, end):
                         label_for_char.append(position)
             predicted_labels.append(label_for_char)
-            
+
         print(predicted_labels)
-        for pre in predicted_labels:
-            f1score += f1(pre, label)
+        for i in range(len(predicted_labels)):
+            lab = filter(lambda x:x != -1,label[i])
+            f1score += f1(predicted_labels[i], lab)
             count += 1
 
     f1score = f1score / count
