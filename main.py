@@ -47,7 +47,7 @@ train_loader = DataLoader(trainSet,batch_size=3,shuffle=False)
 
 
 for i in train_loader:
-    text,label = i[0].to(device),i[1].to(device)
+    text,label = i[0].to(device),i[1].to(device).to(torch.long)
     print(label)
     quit()
     outputs = model(text)
