@@ -63,7 +63,7 @@ for e in range(epoch):
     model.train()
     for i in tqdm(train_loader):
         input_encoding, label = i[0].to(device), i[1].to(device)
-        print(input_encoding.shape)
+        print(input_encoding)
         quit()
         golden_labels = []
         for j in range(train_batch_size):
