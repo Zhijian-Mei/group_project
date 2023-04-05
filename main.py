@@ -67,7 +67,7 @@ for e in range(epoch):
         global_step+=1
         if global_step % 200 == 0:
             print('loss: ', loss.item())
-        break
+
 
     f1score = 0
     count = 0
@@ -75,13 +75,13 @@ for e in range(epoch):
     for i in tqdm(eval_loader):
         text, label = i[0].to(device), i[1]
         output = model(text)
-        output = torch.max(output, dim=-1)
+        output = torch.max(output, dim=-1)[0]
         result = []
-        print(output)
-        quit()
+        for j in range(len(output)):
+            if output[j] == 0:
+                result.append(j)
         f1score += f1(result, label)
         count += 1
-        print(label)
         f1score = f1score / count
         print('f1_score: ', f1score)
         quit()
