@@ -60,7 +60,7 @@ for e in range(epoch):
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-        break
+
 
     model.eval()
     for i in eval_loader:
