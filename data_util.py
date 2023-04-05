@@ -31,7 +31,7 @@ def get_data(df):
     for i in trange(len(df)):
         spans = df['spans'][i]
         # label = [0 for _ in range(len(text))]
-        label = [[0,1] for _ in range(2048)]
+        label = [[0,1] for _ in range(1024)]
         for toxic_position in spans:
             label[toxic_position] = [1,0]
         df['spans'][i] = label

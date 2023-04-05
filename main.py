@@ -20,17 +20,17 @@ print('loading eval data')
 evalSet = get_data(eval)
 print('loading test data')
 testSet = get_data(test)
-max_length = 0
-for i in range(len(trainSet)):
-    if len(trainSet['text'][i].split()) > max_length:
-        max_length = len(trainSet['text'][i])
-for i in range(len(evalSet)):
-    if len(evalSet['text'][i].split()) > max_length:
-        max_length = len(evalSet['text'][i])
-for i in range(len(testSet)):
-    if len(testSet['text'][i].split()) > max_length:
-        max_length = len(testSet['text'][i])
-print(max_length)
+# max_length = 0
+# for i in range(len(trainSet)):
+#     if len(trainSet['text'][i].split()) > max_length:
+#         max_length = len(trainSet['text'][i])
+# for i in range(len(evalSet)):
+#     if len(evalSet['text'][i].split()) > max_length:
+#         max_length = len(evalSet['text'][i])
+# for i in range(len(testSet)):
+#     if len(testSet['text'][i].split()) > max_length:
+#         max_length = len(testSet['text'][i])
+# print(max_length)
 config = RobertaConfig()
 tokenizer = AutoTokenizer.from_pretrained('roberta-base')
 Roberta_model = RobertaModel.from_pretrained('roberta-base').to(device)
@@ -44,7 +44,7 @@ optimizer = torch.optim.AdamW(model.parameters())
 # last_hidden_states = outputs.last_hidden_state
 # print(last_hidden_states.shape)
 trainSet = ToxicDataset(trainSet,tokenizer)
-train_loader = DataLoader(trainSet,batch_size=8,shuffle=False)
+train_loader = DataLoader(trainSet,batch_size=8,shuffle=False,num_workers=8)
 
 model.train()
 
