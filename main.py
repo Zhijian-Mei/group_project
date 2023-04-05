@@ -6,7 +6,7 @@ from tqdm import tqdm
 from data_util import get_data, ToxicDataset
 from torch import nn, cuda
 from torch.utils.data import DataLoader
-from transformers import RobertaModel, RobertaConfig, AutoTokenizer
+from transformers import RobertaModel, RobertaConfig, RobertaTokenizerFast
 from transformers import AutoConfig, AutoModelForTokenClassification
 from model import RobertaMLP
 from evaluation import f1
@@ -37,7 +37,7 @@ evalSet = get_data(eval, mode='eval')
 #         max_length = len(testSet['text'][i])
 # print(max_length)
 config = RobertaConfig()
-tokenizer = AutoTokenizer.from_pretrained('roberta-base')
+tokenizer = RobertaTokenizerFast.from_pretrained('roberta-base')
 Roberta_model = RobertaModel.from_pretrained('roberta-base').to(device)
 model = RobertaMLP(Roberta_model, config).to(device)
 loss_f = nn.BCEWithLogitsLoss()

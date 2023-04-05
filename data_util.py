@@ -4,12 +4,14 @@ import torch
 from torch.utils.data import Dataset
 from torch import FloatTensor
 from tqdm import trange
+from transformers import BatchEncoding
 
 class ToxicDataset(Dataset):
     def __init__(self,df,tokenizer):
         self.text = list(df['text'])
         self.label = list(df['spans'])
         self.tokenizer = tokenizer
+        self.batchEncoding = None
     def __len__(self):
         return len(self.text)
 
@@ -22,7 +24,8 @@ class ToxicDataset(Dataset):
             padding="max_length",
             return_tensors="pt",
         )
-        print(text.token_span)
+        self.batchEncoding = BatchEncoding(text)
+        print(self.batchEncoding.token_to_chars())
         quit()
         text['input_ids'] = torch.squeeze(text['input_ids'])
         label = FloatTensor(self.label[idx])
