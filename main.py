@@ -63,8 +63,6 @@ for e in range(epoch):
     model.train()
     for i in tqdm(train_loader):
         input_encoding, label = i[0].to(device), i[1].to(device)
-        print(input_encoding)
-        quit()
         golden_labels = []
         for j in range(train_batch_size):
             label_for_token = [[0,1] for _ in range(max_length)]
@@ -79,6 +77,9 @@ for e in range(epoch):
                         label_for_token[k] = [1,0]
                         break
             golden_labels.append(label_for_token)
+        print(golden_labels)
+        print(label)
+        quit()
         golden_labels = torch.FloatTensor(golden_labels).to(device)
         output = model(input_encoding)
         loss = loss_f(output, golden_labels)
