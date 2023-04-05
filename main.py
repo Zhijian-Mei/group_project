@@ -60,7 +60,7 @@ for e in range(epoch):
     model.train()
     for i in tqdm(train_loader):
         text, label = i[0], i[1].to(device)
-        text = tokenizer.batch_encode_plus(
+        input_encoding = tokenizer.batch_encode_plus(
             text,
             max_length=128,
             pad_to_max_length=True,
@@ -68,11 +68,12 @@ for e in range(epoch):
             padding="max_length",
             return_tensors="pt",
         ).to(device)
-        print(text.tokens(1))
-        print(text.word_to_chars(1,2))
-        print(text.word_to_chars(1,2)[0])
+        print(input_encoding.words(1))
+        print(input_encoding.tokens(1))
+        print(input_encoding.word_to_chars(1,2))
+        print(input_encoding.word_to_chars(1,2))
         quit()
-        output = model(text)
+        output = model(input_encoding)
         loss = loss_f(output, label)
         optimizer.zero_grad()
         loss.backward()
