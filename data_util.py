@@ -16,15 +16,7 @@ class ToxicDataset(Dataset):
         return len(self.text)
 
     def __getitem__(self, idx):
-        text = self.tokenizer.batch_encode_plus(
-            [self.text[idx]],
-            max_length=self.max_length,
-            pad_to_max_length=True,
-            truncation=True,
-            padding="max_length",
-            return_tensors="pt",
-        )
-        text['input_ids'] = torch.squeeze(text['input_ids'])
+        text = self.text[idx]
         label = FloatTensor(self.label[idx])
         return text,label
 
