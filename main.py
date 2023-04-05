@@ -96,7 +96,7 @@ for e in range(epoch):
         global_step += 1
         if global_step % 100 == 0:
             print('loss: ', loss.item())
-            break
+
 
     f1score = 0
     count = 0
@@ -124,7 +124,8 @@ for e in range(epoch):
                     start, end = input_encoding.token_to_chars(j, k)
                     for position in range(start, end):
                         label_for_char.append(position)
-
+            predicted_labels.append(label_for_char)
+            
         print(predicted_labels)
         for pre in predicted_labels:
             f1score += f1(pre, label)
