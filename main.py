@@ -68,6 +68,7 @@ for e in range(epoch):
             padding="max_length",
             return_tensors="pt",
         ).to(device)
+        print(text.tokens(1))
         print(text.word_to_chars(1,2))
         print(text.word_to_chars(1,2)[0])
         quit()
