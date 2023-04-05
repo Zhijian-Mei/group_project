@@ -16,19 +16,17 @@ class ToxicDataset(Dataset):
         return len(self.text)
 
     def __getitem__(self, idx):
-        text = self.text[idx]
-        input_encoding = self.tokenizer.batch_encode_plus(
-            [text],
+        text = self.tokenizer.batch_encode_plus(
+            [self.text[idx]],
             max_length=self.max_length,
             pad_to_max_length=True,
             truncation=True,
             padding="max_length",
             return_tensors="pt",
         )
-        print(input_encoding.shape)
-        quit()
+        text['input_ids'] = torch.squeeze(text['input_ids'])
         label = FloatTensor(self.label[idx])
-        return input_encoding,label
+        return text,label
 
 def get_data(df,mode='train'):
     df["spans"] = df.spans.apply(literal_eval)
@@ -37,6 +35,7 @@ def get_data(df,mode='train'):
             spans = df['spans'][i]
             if len(spans) > 1024:
                 print(len(spans))
+                quit()
             # label = [0 for _ in range(len(text))]
             label_for_train = [-100 for _ in range(1024)]
             for j in range(len(spans)):
