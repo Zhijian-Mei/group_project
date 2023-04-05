@@ -94,7 +94,7 @@ for e in range(epoch):
         loss.backward()
         optimizer.step()
         global_step += 1
-        if global_step % 200 == 0:
+        if global_step % 100 == 0:
             print('loss: ', loss.item())
             break
 
@@ -113,7 +113,7 @@ for e in range(epoch):
             return_tensors="pt",
         ).to(device)
 
-        output = model(text)
+        output = model(input_encoding)
         output = torch.max(output, dim=-1)[1]
 
         predicted_labels = []
