@@ -75,8 +75,10 @@ for e in range(epoch):
             result = []
             print(o)
             for j in range(len(o)):
-                print(o[j])
-                if o[j] == 0:
+                print(o[j].item()==1)
+                print(o[j]==1)
+                quit()
+                if o[j].item() == 0:
                     result.append(j)
         print(output[0].shape)
         quit()
