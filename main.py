@@ -70,7 +70,7 @@ for e in range(epoch):
         ).to(device)
         print(input_encoding.words(0))
         print(input_encoding.tokens(0))
-        print(input_encoding.word_to_chars(0,2))
+        print(input_encoding.token_to_chars(0,2))
         print(input_encoding.word_to_chars(0,2))
         quit()
         output = model(input_encoding)
