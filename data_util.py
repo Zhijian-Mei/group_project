@@ -27,6 +27,7 @@ def get_data(df,mode='train'):
             # label = [0 for _ in range(len(text))]
             label_for_train = [-100 for _ in range(512)]
             for j in range(len(spans)):
+                print(j)
                 label_for_train[j] = spans[j]
             df['spans'][i] = label_for_train
     return df
