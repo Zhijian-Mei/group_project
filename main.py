@@ -62,7 +62,7 @@ global_step = 0
 for e in range(epoch):
     model.train()
     for i in tqdm(train_loader):
-        text, label = i[0].to(device), i[1].to(device)
+        text, label = i[0], i[1].to(device)
         input_encoding = tokenizer.batch_encode_plus(
             text,
             max_length=max_length,
@@ -70,7 +70,7 @@ for e in range(epoch):
             truncation=True,
             padding="max_length",
             return_tensors="pt",
-        )
+        ).to(device)
 
         golden_labels = []
         for j in range(train_batch_size):
