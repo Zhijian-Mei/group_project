@@ -51,7 +51,7 @@ trainSet = ToxicDataset(trainSet, tokenizer)
 evalSet = ToxicDataset(evalSet, tokenizer)
 
 train_loader = DataLoader(trainSet, batch_size=8, shuffle=False)
-eval_loader = DataLoader(evalSet, batch_size=8)
+eval_loader = DataLoader(evalSet, batch_size=1)
 
 epoch = 10
 for e in range(epoch):
