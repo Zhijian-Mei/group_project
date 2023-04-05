@@ -93,7 +93,7 @@ for e in range(epoch):
                         break
             golden_labels.append(label_for_token)
         golden_labels = torch.LongTensor(golden_labels).to(device)
-        outpu = model(**input_encoding,labels=golden_labels)
+        output = model(**input_encoding,labels=golden_labels)
         print(output)
         print(output.logits)
         print(output.loss)
