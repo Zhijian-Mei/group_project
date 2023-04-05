@@ -21,7 +21,7 @@ test = pd.read_csv('data/tsd_test.csv')
 print('loading train data')
 trainSet = get_data(train)
 print('loading eval data')
-evalSet = get_data(eval)
+evalSet = get_data(eval,mode='eval')
 # print('loading test data')
 # testSet = get_data(test)
 # max_length = 0
@@ -66,6 +66,8 @@ for e in range(epoch):
         optimizer.step()
         break
 
+    f1score = 0
+    count = 0
     model.eval()
     for i in tqdm(eval_loader):
         text, label = i[0].to(device), i[1]
@@ -73,12 +75,12 @@ for e in range(epoch):
         output = torch.max(output, dim=-1)
         for o in output[1]:
             result = []
-            print(o)
             for j in range(len(o)):
-                print(o[j].item()==1)
-                print(o[j]==1)
-                quit()
                 if o[j].item() == 0:
                     result.append(j)
-        print(output[0].shape)
+            f1score += f1(result,label)
+            count+=1
+        print(label)
+        f1score = f1score/count
+        print('f1_score: ',f1score)
         quit()
