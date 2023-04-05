@@ -11,7 +11,7 @@ from transformers import AutoConfig, AutoModelForTokenClassification
 from model import RobertaMLP
 from evaluation import f1
 
-device = torch.device('cuda:0' if cuda.is_available() else 'cpu')
+device = torch.device('cuda:7' if cuda.is_available() else 'cpu')
 
 train = pd.read_csv('data/tsd_train.csv')
 eval = pd.read_csv('data/tsd_trial.csv')
