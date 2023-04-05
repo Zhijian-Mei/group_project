@@ -3,7 +3,7 @@ from torch import nn
 
 class RobertaMLP(nn.Module):
     def __init__(self,Roberta_model,config):
-        super().init()
+        super().__init__()
         self.model = Roberta_model
         self.output = nn.Linear(config['hidden_size'],2048)
 
