@@ -73,8 +73,6 @@ for e in range(epoch):
             padding="max_length",
             return_tensors="pt",
         ).to(device)
-        print(input_encoding['attention_mask'])
-        quit()
         attention_mask = input_encoding['attention_mask']
         golden_labels = []
         for j in range(input_encoding['input_ids'].shape[0]):
@@ -94,6 +92,9 @@ for e in range(epoch):
                         label_for_token[k] = 1
                         break
             golden_labels.append(label_for_token)
+        print(golden_labels)
+        print(label)
+        quit()
         golden_labels = torch.FloatTensor(golden_labels).to(device)
         output = model(input_encoding)
         loss = loss_f(output, golden_labels)
