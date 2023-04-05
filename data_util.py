@@ -20,17 +20,16 @@ class ToxicDataset(Dataset):
         label = FloatTensor(self.label[idx])
         return text,label
 
-def get_data(df,mode='train'):
+def get_data(df):
     df["spans"] = df.spans.apply(literal_eval)
-    if mode == 'train':
-        for i in trange(len(df)):
-            spans = df['spans'][i]
-            if len(spans) > 1024:
-                print(len(spans))
-                quit()
-            # label = [0 for _ in range(len(text))]
-            label_for_train = [-100 for _ in range(1024)]
-            for j in range(len(spans)):
-                label_for_train[j] = spans[j]
-            df['spans'][i] = label_for_train
+    for i in trange(len(df)):
+        spans = df['spans'][i]
+        if len(spans) > 1024:
+            print(len(spans))
+            quit()
+        # label = [0 for _ in range(len(text))]
+        label_for_train = [-1 for _ in range(1024)]
+        for j in range(len(spans)):
+            label_for_train[j] = spans[j]
+        df['spans'][i] = label_for_train
     return df

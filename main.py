@@ -23,7 +23,7 @@ print('loading train data')
 trainSet = get_data(train)
 print('loading eval data')
 evalSet = get_data(eval)
-print('loading test data')
+# print('loading test data')
 # testSet = get_data(test,mode='eval')
 # max_length = 0
 # for i in range(len(trainSet)):
@@ -42,7 +42,7 @@ tokenizer = AutoTokenizer.from_pretrained('roberta-base')
 Roberta_model = RobertaModel.from_pretrained('roberta-base').to(device)
 model = RobertaMLP(Roberta_model, config).to(device)
 loss_f = nn.BCEWithLogitsLoss()
-optimizer = torch.optim.AdamW(model.parameters(),lr=0.001)
+optimizer = torch.optim.AdamW(model.parameters(), lr=0.001)
 # inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
 # print(inputs['input_ids'].shape)
 # outputs = model(**inputs)
@@ -50,11 +50,12 @@ optimizer = torch.optim.AdamW(model.parameters(),lr=0.001)
 # last_hidden_states = outputs.last_hidden_state
 # print(last_hidden_states.shape)
 max_length = 256
-trainSet = ToxicDataset(trainSet, tokenizer,max_length)
+trainSet = ToxicDataset(trainSet, tokenizer, max_length)
 evalSet = ToxicDataset(evalSet, tokenizer)
 train_batch_size = 8
-train_loader = DataLoader(trainSet, batch_size =train_batch_size, shuffle=False)
-eval_loader = DataLoader(evalSet, batch_size=1)
+eval_batch_size = 8
+train_loader = DataLoader(trainSet, batch_size=train_batch_size, shuffle=False)
+eval_loader = DataLoader(evalSet, batch_size=eval_batch_size)
 
 epoch = 10
 global_step = 0
@@ -73,38 +74,36 @@ for e in range(epoch):
         ).to(device)
 
         golden_labels = []
-        for j in range(train_batch_size):
-            label_for_token = [[0,1] for _ in range(max_length)]
-            for k in range(1,max_length):
-                if input_encoding.token_to_chars(j,k) is None:
+        for j in range(input_encoding['input_ids'].shape[0]):
+            label_for_token = [[1, 0] for _ in range(max_length)]
+            for k in range(1, max_length):
+                if input_encoding.token_to_chars(j, k) is None:
                     continue
-                start,end = input_encoding.token_to_chars(j,k)
+                start, end = input_encoding.token_to_chars(j, k)
                 for position in label[j]:
-                    if position == -100:
+                    if position == -1:
                         break
                     if start <= position < end:
-                        label_for_token[k] = [1,0]
+                        label_for_token[k] = [0, 1]
                         break
             golden_labels.append(label_for_token)
         golden_labels = torch.FloatTensor(golden_labels).to(device)
         output = model(input_encoding)
-        print(golden_labels)
-        print(label)
-        quit()
         loss = loss_f(output, golden_labels)
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-        global_step+=1
+        global_step += 1
         if global_step % 200 == 0:
             print('loss: ', loss.item())
-
+            break
 
     f1score = 0
     count = 0
     model.eval()
     for i in tqdm(eval_loader):
         text, label = i[0], i[1]
+        label = filter(lambda x: x == -1, label)
         input_encoding = tokenizer.batch_encode_plus(
             text,
             max_length=max_length,
@@ -113,18 +112,23 @@ for e in range(epoch):
             padding="max_length",
             return_tensors="pt",
         ).to(device)
+
         output = model(text)
-        output = torch.max(output, dim=-1)[1][0]
-        result = []
-        for j in range(len(output)):
-            print(output[j].item())
-            if output[j].item() == 0:
-                result.append(j)
-        f1score += f1(result, label)
-        count += 1
+        output = torch.max(output, dim=-1)[1]
 
-        print(result)
-        print()
+        predicted_labels = []
+        for j in range(input_encoding['input_ids'].shape[0]):
+            label_for_char = []
+            for k in range(1, max_length):
+                if output[j][k] == 1:
+                    start, end = input_encoding.token_to_chars(j, k)
+                    for position in range(start, end):
+                        label_for_char.append(position)
+
+        print(predicted_labels)
+        for pre in predicted_labels:
+            f1score += f1(pre, label)
+            count += 1
+
     f1score = f1score / count
-    print('f1_score: ', f1score)
-
+    print(f'f1_score: {f1score} at epoch {e}')
