@@ -25,6 +25,8 @@ class ToxicDataset(Dataset):
             padding="max_length",
             return_tensors="pt",
         )
+        print(input_encoding.shape)
+        quit()
         label = FloatTensor(self.label[idx])
         return input_encoding,label
 
