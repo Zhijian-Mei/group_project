@@ -67,8 +67,8 @@ for e in range(epoch):
             truncation=True,
             padding="max_length",
             return_tensors="pt",
-        )
-        print(text)
+        ).to(device)
+        print(text.token_to_chars(0,0))
         quit()
         output = model(text)
         loss = loss_f(output, label)
