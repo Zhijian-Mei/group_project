@@ -18,8 +18,8 @@ print('loading train data')
 trainSet = get_data(train)
 print('loading eval data')
 evalSet = get_data(eval)
-print('loading test data')
-testSet = get_data(test)
+# print('loading test data')
+# testSet = get_data(test)
 # max_length = 0
 # for i in range(len(trainSet)):
 #     if len(trainSet['text'][i].split()) > max_length:
@@ -44,10 +44,11 @@ optimizer = torch.optim.AdamW(model.parameters())
 # last_hidden_states = outputs.last_hidden_state
 # print(last_hidden_states.shape)
 trainSet = ToxicDataset(trainSet,tokenizer)
+evalSet = ToxicDataset(evalSet,tokenizer)
+
 train_loader = DataLoader(trainSet,batch_size=8,shuffle=False)
 eval_loader = DataLoader(evalSet,batch_size=8)
-print(eval_loader[0])
-quit()
+
 epoch = 10
 for e in range(epoch):
     model.train()
