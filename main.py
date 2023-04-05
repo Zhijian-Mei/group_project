@@ -49,4 +49,5 @@ for i in train_loader:
     text,label = i[0].to(device),i[1].to(device)
     outputs = model(text)
     print(outputs.shape)
+    print(label.shape)
     quit()
