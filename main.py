@@ -96,8 +96,8 @@ eval_loader = DataLoader(evalSet, batch_size=eval_batch_size)
 
 epoch = 10
 global_step = 0
-labels_to_ids = {'T':1,'NT':0}
-ids_to_labels = {1:'T',0:'NT'}
+best_f1 = 0
+
 for e in range(epoch):
     model.train()
     for i in tqdm(train_loader):
@@ -119,7 +119,7 @@ for e in range(epoch):
         golden_labels = torch.LongTensor(golden_labels).to(device)
         logits,loss = model(input_encoding,golden_labels)
 
-        print(logits.argmax(-1).cpu().tolist())
+        # print(logits.argmax(-1).cpu().tolist())
 
         optimizer.zero_grad()
         loss.backward()
@@ -129,8 +129,6 @@ for e in range(epoch):
         if global_step % 100 == 0:
             print('loss: ', loss.item())
 
-    continue
-
 
 
     f1score = 0
@@ -139,7 +137,7 @@ for e in range(epoch):
     for i in tqdm(eval_loader):
         text, label,_ = i[0], i[1],i[2]
         input_encoding = tokenizer.batch_encode_plus(
-            ["Damn, a whole family. Sad indeed."],
+            text,
             max_length=max_length,
             pad_to_max_length=True,
             truncation=True,
@@ -149,8 +147,7 @@ for e in range(epoch):
 
         logits = model(input_encoding)
         predicted_token_class_ids = logits.argmax(-1)
-        print(predicted_token_class_ids)
-        quit()
+
         predicted_labels = []
         for j in range(input_encoding['input_ids'].shape[0]):
             label_for_char = []
@@ -161,10 +158,13 @@ for e in range(epoch):
                         label_for_char.append(position)
             predicted_labels.append(label_for_char)
 
-        print(predicted_labels)
         for i in range(len(predicted_labels)):
             f1score += f1(predicted_labels[i], label[i])
             count += 1
 
     f1score = f1score / count
     print(f'f1_score: {f1score} at epoch {e}')
+    torch.save({'roberta': model.state_dict()}, f'checkpoint/roberta_epoch{e}.pt')
+    if f1score > best_f1:
+        best_f1 = f1score
+        torch.save({'roberta': model.state_dict()}, f'checkpoint/best_roberta_epoch{e}.pt')

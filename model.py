@@ -19,7 +19,7 @@ class RobertaMLP_char(nn.Module):
         logits = self.cls(x)
 
         loss_fct = CrossEntropyLoss(ignore_index=-100)
-        # Only keep active parts of the loss
+
         if labels is not None:
             loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
             return logits ,loss
@@ -38,7 +38,7 @@ class RobertaMLP_token(nn.Module):
         logits = self.cls(x)
 
         loss_fct = CrossEntropyLoss(ignore_index=-100)
-        # Only keep active parts of the loss
+
         if labels is not None:
             loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
             return logits ,loss
