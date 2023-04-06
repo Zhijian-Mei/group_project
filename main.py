@@ -89,7 +89,7 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=0.001)
 max_length = 256
 trainSet = ToxicDataset(trainSet, tokenizer, max_length)
 evalSet = ToxicDataset(evalSet, tokenizer)
-train_batch_size = 4
+train_batch_size = 2
 eval_batch_size = 2
 train_loader = DataLoader(trainSet, batch_size=train_batch_size, shuffle=False)
 eval_loader = DataLoader(evalSet, batch_size=eval_batch_size)
@@ -117,8 +117,9 @@ for e in range(epoch):
         #     print(label[j])
         # quit()
         golden_labels = torch.LongTensor(golden_labels).to(device)
-        output = model(input_encoding)
-        loss = loss_f(output,golden_labels)
+        logits = model(input_encoding)
+        print(logits.argmax(-1))
+        loss = loss_f(logits,golden_labels)
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
