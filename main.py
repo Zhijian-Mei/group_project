@@ -168,3 +168,4 @@ for e in range(epoch):
     if f1score > best_f1:
         best_f1 = f1score
         torch.save({'roberta': model.state_dict()}, f'checkpoint/best_roberta_epoch{e}.pt')
+        print('saving better checkpoint')
