@@ -20,10 +20,9 @@ class RobertaMLP(nn.Module):
 
         loss_fct = CrossEntropyLoss()
         # Only keep active parts of the loss
-        attention_mask = text['attention_mask']
-        active_loss = attention_mask.view(-1) == 1
-        active_logits = logits.view(-1, self.num_labels)[active_loss]
-        active_labels = labels.view(-1)[active_loss]
-        loss = loss_fct(active_logits, active_labels)
+        print(logits.view(-1, self.num_labels).shape)
+        print(labels.view(-1).shape)
+        quit()
+        loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
 
         return logits ,loss
