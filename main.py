@@ -78,7 +78,7 @@ config = RobertaConfig()
 tokenizer = AutoTokenizer.from_pretrained('roberta-base')
 model = RobertaModel.from_pretrained('roberta-base').to(device)
 model = RobertaMLP(model, config).to(device)
-loss_f = nn.BCEWithLogitsLoss()
+loss_f = nn.CrossEntropyLoss(ignore_index=-100)
 optimizer = torch.optim.AdamW(model.parameters(), lr=0.001)
 # inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
 # print(inputs['input_ids'].shape)
@@ -117,14 +117,16 @@ for e in range(epoch):
         #     print(label[j])
         # quit()
         golden_labels = torch.LongTensor(golden_labels).to(device)
-        logits = model(input_encoding)
+        logits,loss = model(input_encoding,label)
+
         print(logits.argmax(-1))
-        loss = loss_f(logits,golden_labels)
+        print(loss.item())
+        quit()
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
         global_step += 1
-        print(loss.item())
+
         if global_step % 100 == 0:
             print('loss: ', loss.item())
             break
