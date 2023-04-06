@@ -133,7 +133,7 @@ for e in range(epoch):
     count = 0
     model.eval()
     for i in tqdm(eval_loader):
-        text, label = i[0], i[1]
+        text, label,_ = i[0], i[1],i[2]
         input_encoding = tokenizer.batch_encode_plus(
             ["Damn, a whole family. Sad indeed."],
             max_length=max_length,
