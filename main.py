@@ -114,7 +114,7 @@ for e in range(epoch):
     for i in tqdm(eval_loader):
         text, label = i[0], i[1]
         input_encoding = tokenizer.batch_encode_plus(
-            text,
+            "Damn, a whole family. Sad indeed.",
             max_length=max_length,
             pad_to_max_length=True,
             truncation=True,
@@ -124,6 +124,8 @@ for e in range(epoch):
 
         logits = model(**input_encoding).logits
         predicted_token_class_ids = logits.argmax(-1)
+        print(predicted_token_class_ids)
+        quit()
         predicted_labels = []
         for j in range(input_encoding['input_ids'].shape[0]):
             label_for_char = []
