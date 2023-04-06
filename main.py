@@ -120,7 +120,7 @@ for e in range(epoch):
         logits,loss = model(input_encoding,golden_labels)
 
         print(logits.argmax(-1).cpu().tolist())
-        quit()
+
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
