@@ -59,7 +59,7 @@ def get_token_labal(input_encoding,label,max_length=256):
         golden_labels.append(label_for_token)
     return golden_labels
 
-def get_char_label(input_encoding,label,atmax_length=1024):
+def get_char_label(input_encoding,label,max_length=1024):
     attention_mask = input_encoding['attention_mask']
     golden_labels = []
     for j in range(input_encoding['input_ids'].shape[0]):
@@ -70,7 +70,7 @@ def get_char_label(input_encoding,label,atmax_length=1024):
             else:
                 break
         for position in label[j]:
-            label_for_char[position] = 1
+            label_for_char[int(position)] = 1
         golden_labels.append(label_for_char)
     return golden_labels
 
