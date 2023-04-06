@@ -93,10 +93,10 @@ for e in range(epoch):
                         label_for_token[k] = 1
                         break
             golden_labels.append(label_for_token)
-        for j in range(len(golden_labels)):
-            print(golden_labels[j])
-            print(input_encoding.tokens(j))
-        quit()
+        # for j in range(len(golden_labels)):
+        #     print(golden_labels[j])
+        #     print(input_encoding.tokens(j))
+        # quit()
         golden_labels = torch.LongTensor(golden_labels).to(device)
         output = model(**input_encoding,labels=golden_labels)
         loss = output.loss
@@ -106,6 +106,7 @@ for e in range(epoch):
         global_step += 1
         if global_step % 100 == 0:
             print('loss: ', loss.item())
+            break
 
 
     f1score = 0
