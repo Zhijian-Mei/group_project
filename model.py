@@ -20,6 +20,7 @@ class RobertaMLP(nn.Module):
 
         loss_fct = CrossEntropyLoss()
         # Only keep active parts of the loss
+        print(logits.shape)
         print(logits.view(-1, self.num_labels).shape)
         print(labels.view(-1).shape)
         quit()
