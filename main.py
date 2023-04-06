@@ -77,7 +77,7 @@ for e in range(epoch):
         golden_labels = []
         for j in range(input_encoding['input_ids'].shape[0]):
             label_for_token = [-100 for _ in range(max_length)]
-            for k in range(1, max_length):
+            for k in range(max_length):
                 if attention_mask[j][k] == 1:
                     label_for_token[k] = 0
                 else:
