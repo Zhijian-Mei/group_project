@@ -92,9 +92,6 @@ for e in range(epoch):
                     if start <= position < end:
                         label_for_token[k] = 1
                         break
-            for position in label[j]:
-                print(text[j][position],end='')
-            print()
             golden_labels.append(label_for_token)
         print(golden_labels)
         print(input_encoding.tokens())
