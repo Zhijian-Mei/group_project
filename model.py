@@ -18,7 +18,7 @@ class RobertaMLP(nn.Module):
         x = torch.reshape(x,(x.shape[0],x.shape[2],x.shape[1]))
         logits = self.cls(x)
 
-        loss_fct = CrossEntropyLoss()
+        loss_fct = CrossEntropyLoss(ignore_index=-100)
         # Only keep active parts of the loss
         loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
 
