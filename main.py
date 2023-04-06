@@ -36,13 +36,13 @@ def get_token_labal(input_encoding,label):
         golden_labels.append(label_for_token)
     return golden_labels
 
-def get_char_label(input_encoding,label,tokenizer,max_length=1024):
+def get_char_label(input_encoding,label,text_length,max_length=1024):
     golden_labels = []
     for j in range(input_encoding['input_ids'].shape[0]):
-        text = tokenizer.decode(input_encoding['input_ids'][j])
-        print(text)
-        quit()
         label_for_char = [-100 for _ in range(max_length)]
+        for j in range(max_length):
+            if j < text_length:
+                label_for_char[j] = 0
         for position in label[j]:
             label_for_char[int(position)] = 1
         golden_labels.append(label_for_char)
@@ -101,7 +101,7 @@ ids_to_labels = {1:'T',0:'NT'}
 for e in range(epoch):
     model.train()
     for i in tqdm(train_loader):
-        text, label = i[0], i[1].to(device)
+        text, label,text_length = i[0], i[1].to(device)
         input_encoding = tokenizer.batch_encode_plus(
             text,
             max_length=max_length,
@@ -111,7 +111,7 @@ for e in range(epoch):
             return_tensors="pt",
         ).to(device)
         # golden_labels = get_token_labal(input_encoding,label,max_length)
-        golden_labels = get_char_label(input_encoding,label,tokenizer=tokenizer)
+        golden_labels = get_char_label(input_encoding,label,text_length)
         for j in range(len(golden_labels)):
             print(golden_labels[j])
             print(label[j])

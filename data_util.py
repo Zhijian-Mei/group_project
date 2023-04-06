@@ -18,7 +18,7 @@ class ToxicDataset(Dataset):
     def __getitem__(self, idx):
         text = self.text[idx]
         label = FloatTensor(self.label[idx])
-        return text,label
+        return text,label,len(text)
 
 def get_data(df):
     df["spans"] = df.spans.apply(literal_eval)
