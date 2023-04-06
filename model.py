@@ -9,7 +9,7 @@ class RobertaMLP(nn.Module):
         self.model = Roberta_model
         self.up = nn.Linear(256,1024)
         self.cls = nn.Linear(config.hidden_size,2)
-
+        self.num_labels = 2
 
     def forward(self,text,labels):
         x = self.model(text['input_ids'],text['attention_mask']).last_hidden_state
