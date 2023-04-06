@@ -101,7 +101,7 @@ ids_to_labels = {1:'T',0:'NT'}
 for e in range(epoch):
     model.train()
     for i in tqdm(train_loader):
-        text, label,text_length = i[0], i[1].to(device)
+        text, label,text_length = i[0], i[1].to(device),i[2]
         input_encoding = tokenizer.batch_encode_plus(
             text,
             max_length=max_length,
