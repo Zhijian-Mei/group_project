@@ -146,7 +146,7 @@ for e in range(epoch):
             return_tensors="pt",
         ).to(device)
 
-        logits = model(input_encoding).logits
+        logits = model(input_encoding)
         predicted_token_class_ids = logits.argmax(-1)
         print(predicted_token_class_ids)
         quit()
