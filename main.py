@@ -119,7 +119,7 @@ for e in range(epoch):
         golden_labels = torch.LongTensor(golden_labels).to(device)
         logits,loss = model(input_encoding,golden_labels)
 
-        print(loss.item())
+        print(list(logits.argmax(-1).item()))
 
         optimizer.zero_grad()
         loss.backward()
@@ -128,7 +128,8 @@ for e in range(epoch):
 
         if global_step % 100 == 0:
             print('loss: ', loss.item())
-            break
+
+    continue
 
 
 
