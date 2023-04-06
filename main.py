@@ -40,12 +40,9 @@ def get_char_label(input_encoding,label,text_length,max_length=1024):
     golden_labels = []
     for j in range(input_encoding['input_ids'].shape[0]):
         label_for_char = [-100 for _ in range(max_length)]
-        for j in range(max_length):
-            print(j)
-            print(text_length)
-            quit()
-            if j < text_length:
-                label_for_char[j] = 0
+        for k in range(max_length):
+            if k < text_length[j]:
+                label_for_char[k] = 0
         for position in label[j]:
             label_for_char[int(position)] = 1
         golden_labels.append(label_for_char)
