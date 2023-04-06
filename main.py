@@ -115,7 +115,7 @@ for e in range(epoch):
     for i in tqdm(eval_loader):
         text, label = i[0], i[1]
         input_encoding = tokenizer.batch_encode_plus(
-            "Damn, a whole family. Sad indeed.",
+            ["Damn, a whole family. Sad indeed."],
             max_length=max_length,
             pad_to_max_length=True,
             truncation=True,
