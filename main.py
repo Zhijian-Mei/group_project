@@ -11,6 +11,69 @@ from transformers import AutoConfig, AutoModelForTokenClassification
 from model import RobertaMLP
 from evaluation import f1
 
+
+
+def get_token_labal(input_encoding,label):
+    attention_mask = input_encoding['attention_mask']
+    golden_labels = []
+    for j in range(input_encoding['input_ids'].shape[0]):
+        label_for_token = [-100 for _ in range(max_length)]
+        for k in range(max_length):
+            if attention_mask[j][k] == 1:
+                label_for_token[k] = 0
+            else:
+                break
+            if input_encoding.token_to_chars(j, k) is None:
+                label_for_token[k] = -100
+                continue
+            start, end = input_encoding.token_to_chars(j, k)
+            for position in label[j]:
+                if position == -1:
+                    break
+                if start <= position < end:
+                    label_for_token[k] = 1
+                    break
+        golden_labels.append(label_for_token)
+    return golden_labels
+
+def get_token_labal(input_encoding,label,max_length=256):
+    attention_mask = input_encoding['attention_mask']
+    golden_labels = []
+    for j in range(input_encoding['input_ids'].shape[0]):
+        label_for_token = [-100 for _ in range(max_length)]
+        for k in range(max_length):
+            if attention_mask[j][k] == 1:
+                label_for_token[k] = 0
+            else:
+                break
+            if input_encoding.token_to_chars(j, k) is None:
+                label_for_token[k] = -100
+                continue
+            start, end = input_encoding.token_to_chars(j, k)
+            for position in label[j]:
+                if position == -1:
+                    break
+                if start <= position < end:
+                    label_for_token[k] = 1
+                    break
+        golden_labels.append(label_for_token)
+    return golden_labels
+
+def get_char_label(input_encoding,label,atmax_length=1024):
+    attention_mask = input_encoding['attention_mask']
+    golden_labels = []
+    for j in range(input_encoding['input_ids'].shape[0]):
+        label_for_char = [-100 for _ in range(max_length)]
+        for k in range(max_length):
+            if attention_mask[j][k] == 1:
+                label_for_char[k] = 0
+            else:
+                break
+        for position in label[j]:
+            label_for_char[position] = 1
+        golden_labels.append(label_for_char)
+    return golden_labels
+
 device = torch.device('cuda:7' if cuda.is_available() else 'cpu')
 
 train = pd.read_csv('data/tsd_train.csv')
@@ -73,30 +136,12 @@ for e in range(epoch):
             padding="max_length",
             return_tensors="pt",
         ).to(device)
-        attention_mask = input_encoding['attention_mask']
-        golden_labels = []
-        for j in range(input_encoding['input_ids'].shape[0]):
-            label_for_token = [-100 for _ in range(max_length)]
-            for k in range(max_length):
-                if attention_mask[j][k] == 1:
-                    label_for_token[k] = 0
-                else:
-                    break
-                if input_encoding.token_to_chars(j, k) is None:
-                    label_for_token[k] = -100
-                    continue
-                start, end = input_encoding.token_to_chars(j, k)
-                for position in label[j]:
-                    if position == -1:
-                        break
-                    if start <= position < end:
-                        label_for_token[k] = 1
-                        break
-            golden_labels.append(label_for_token)
-        # for j in range(len(golden_labels)):
-        #     print(golden_labels[j])
-        #     print(input_encoding.tokens(j))
-        # quit()
+        # golden_labels = get_token_labal(input_encoding,label,max_length)
+        golden_labels = get_char_label(input_encoding,label)
+        for j in range(len(golden_labels)):
+            print(golden_labels[j])
+            print(label[j])
+        quit()
         golden_labels = torch.LongTensor(golden_labels).to(device)
         output = model(**input_encoding,labels=golden_labels)
         loss = output.loss
