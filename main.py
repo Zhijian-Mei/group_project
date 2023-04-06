@@ -118,13 +118,12 @@ for e in range(epoch):
         # quit()
         golden_labels = torch.LongTensor(golden_labels).to(device)
         output = model(input_encoding)
-        print(output.shape)
-        quit()
         loss = loss_f(output,golden_labels)
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
         global_step += 1
+        print(loss.item())
         if global_step % 100 == 0:
             print('loss: ', loss.item())
             break
