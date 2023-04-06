@@ -8,12 +8,12 @@ from torch import nn, cuda
 from torch.utils.data import DataLoader
 from transformers import RobertaModel, RobertaConfig, AutoTokenizer, RobertaForTokenClassification
 from transformers import AutoConfig, AutoModelForTokenClassification
-from model import RobertaMLP
+from model import *
 from evaluation import f1
 
 
 
-def get_token_labal(input_encoding,label):
+def get_token_labal(input_encoding,label,max_length):
     attention_mask = input_encoding['attention_mask']
     golden_labels = []
     for j in range(input_encoding['input_ids'].shape[0]):
@@ -77,9 +77,9 @@ evalSet = get_data(eval)
 config = RobertaConfig()
 tokenizer = AutoTokenizer.from_pretrained('roberta-base')
 model = RobertaModel.from_pretrained('roberta-base').to(device)
-model = RobertaMLP(model, config).to(device)
-loss_f = nn.CrossEntropyLoss(ignore_index=-100)
-optimizer = torch.optim.AdamW(model.parameters(), lr=0.0001)
+model = RobertaMLP_token(model, config).to(device)
+
+optimizer = torch.optim.AdamW(model.parameters(), lr=2e-5)
 # inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
 # print(inputs['input_ids'].shape)
 # outputs = model(**inputs)
@@ -110,8 +110,8 @@ for e in range(epoch):
             padding="max_length",
             return_tensors="pt",
         ).to(device)
-        # golden_labels = get_token_labal(input_encoding,label,max_length)
-        golden_labels = get_char_label(input_encoding,label,text_length)
+        golden_labels = get_token_labal(input_encoding,label,max_length)
+        # golden_labels = get_char_label(input_encoding,label,text_length)
         # for j in range(len(golden_labels)):
         #     print(golden_labels[j])
         #     print(label[j])

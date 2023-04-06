@@ -3,7 +3,7 @@ from torch import nn
 from torch.nn import CrossEntropyLoss
 
 
-class RobertaMLP(nn.Module):
+class RobertaMLP_char(nn.Module):
     def __init__(self,Roberta_model,config):
         super().__init__()
         self.model = Roberta_model
@@ -16,6 +16,25 @@ class RobertaMLP(nn.Module):
         x = torch.reshape(x,(x.shape[0],x.shape[2],x.shape[1]))
         x = self.up(x)
         x = torch.reshape(x,(x.shape[0],x.shape[2],x.shape[1]))
+        logits = self.cls(x)
+
+        loss_fct = CrossEntropyLoss(ignore_index=-100)
+        # Only keep active parts of the loss
+        if labels is not None:
+            loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
+            return logits ,loss
+        return logits
+
+class RobertaMLP_token(nn.Module):
+    def __init__(self,Roberta_model,config):
+        super().__init__()
+        self.model = Roberta_model
+
+        self.cls = nn.Linear(config.hidden_size,2)
+        self.num_labels = 2
+
+    def forward(self,text,labels=None):
+        x = self.model(text['input_ids'],text['attention_mask']).last_hidden_state
         logits = self.cls(x)
 
         loss_fct = CrossEntropyLoss(ignore_index=-100)
