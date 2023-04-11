@@ -160,8 +160,8 @@ for e in range(epoch):
                     for position in range(start, end):
                         label_for_char.append(position)
             predicted_labels.append(label_for_char)
-        if len(predicted_labels) != 0:
-            print(predicted_labels)
+        # if len(predicted_labels) != 0:
+        #     print(predicted_labels)
         for i in range(len(predicted_labels)):
             f1score += f1(predicted_labels[i], label[i])
             count += 1
