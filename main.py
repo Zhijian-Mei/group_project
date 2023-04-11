@@ -112,8 +112,7 @@ for e in range(epoch):
             padding="max_length",
             return_tensors="pt",
         ).to(device)
-        print(input_encoding['attention_mask'])
-        quit()
+
         golden_labels = get_token_labal(input_encoding,label,max_length)
         # golden_labels = get_char_label(input_encoding,label,text_length)
         # for j in range(len(golden_labels)):
