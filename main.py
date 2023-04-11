@@ -79,7 +79,7 @@ tokenizer = AutoTokenizer.from_pretrained('roberta-base')
 model = RobertaModel.from_pretrained('roberta-base').to(device)
 model = RobertaMLP_token(model, config).to(device)
 
-optimizer = torch.optim.AdamW(model.parameters(), lr=2e-5)
+optimizer = torch.optim.AdamW(model.parameters(), lr=0.001)
 # inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
 # print(inputs['input_ids'].shape)
 # outputs = model(**inputs)
