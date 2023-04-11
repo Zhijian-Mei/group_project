@@ -30,7 +30,7 @@ class RobertaMLP_token(nn.Module):
         super().__init__()
         self.model = Roberta_model
         self.num_labels = 2
-        self.cls = nn.Linear(config.hidden_size,num_labels)
+        self.cls = nn.Linear(config.hidden_size,self.num_labels)
 
 
 
