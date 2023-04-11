@@ -76,8 +76,10 @@ evalSet = get_data(eval)
 # quit()
 config = RobertaConfig()
 tokenizer = AutoTokenizer.from_pretrained('roberta-base')
-model = RobertaModel.from_pretrained('roberta-base').to(device)
-model = RobertaMLP_token(model, config).to(device)
+roberta = RobertaModel.from_pretrained('roberta-base').to(device)
+for param in roberta.parameters():
+    param.requires_grad = False
+model = RobertaMLP_token(roberta, config).to(device)
 
 optimizer = torch.optim.AdamW(model.parameters(), lr=0.0001)
 # inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
