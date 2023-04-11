@@ -112,17 +112,8 @@ for e in range(epoch):
             padding="max_length",
             return_tensors="pt",
         ).to(device)
-
-        for j in range(input_encoding['input_ids'].shape[0]):
-            label_for_char = []
-            for k in range(1, max_length):
-                start, end = input_encoding.token_to_chars(j, k)
-                for position in range(start, end):
-                    print(text[j][position],end='')
-                print()
-            quit()
-            predicted_labels.append(label_for_char)
-
+        print(input_encoding['attention_mask'])
+        quit()
         golden_labels = get_token_labal(input_encoding,label,max_length)
         # golden_labels = get_char_label(input_encoding,label,text_length)
         # for j in range(len(golden_labels)):
