@@ -152,7 +152,7 @@ for e in range(epoch):
         for j in range(input_encoding['input_ids'].shape[0]):
             label_for_char = []
             for k in range(1, max_length):
-                if predicted_token_class_ids[j][k] == 1:
+                if predicted_token_class_ids[j][k] == 1 and input_encoding['attention_mask'][j][k] == 1:
                     start, end = input_encoding.token_to_chars(j, k)
                     for position in range(start, end):
                         label_for_char.append(position)
