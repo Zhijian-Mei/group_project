@@ -30,8 +30,8 @@ class RobertaMLP_token(nn.Module):
         super().__init__()
         self.model = Roberta_model
         self.num_labels = 2
-        self.up = nn.Linear(config.hidden_size,2048)
-        self.down = nn.Linear(2048,self.num_labels)
+        self.up = nn.Linear(config.hidden_size,512)
+        self.down = nn.Linear(512,self.num_labels)
 
 
     def forward(self,text,labels=None):
