@@ -152,6 +152,8 @@ for e in range(epoch):
         predicted_token_class_ids = logits.argmax(-1)
 
         predicted_labels = []
+        for j in range(len(label)):
+            label[j] = [item for item in label[j] if item != -1]
         for j in range(input_encoding['input_ids'].shape[0]):
             label_for_char = []
             for k in range(1, max_length):

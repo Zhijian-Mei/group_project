@@ -20,7 +20,6 @@ class ToxicDataset(Dataset):
         text = self.text[idx]
         if self.eval:
             label = self.label[idx]
-            label = [i for i in label if i != -1]
             return text,label,len(text)
         label = FloatTensor(self.label[idx])
         return text,label,len(text)
