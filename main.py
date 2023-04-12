@@ -131,7 +131,7 @@ for e in range(epoch):
 
         if global_step % 100 == 0:
             print('loss: ', loss.item())
-            break
+
 
 
     f1score = 0
@@ -165,8 +165,6 @@ for e in range(epoch):
         # if len(predicted_labels) != 0:
         #     print(predicted_labels)
         for j in range(len(predicted_labels)):
-            print(predicted_labels[j])
-            print(label[j])
             f1score += f1(predicted_labels[j], label[j])
             count += 1
 
