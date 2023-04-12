@@ -164,8 +164,10 @@ for e in range(epoch):
             predicted_labels.append(label_for_char)
         # if len(predicted_labels) != 0:
         #     print(predicted_labels)
-        for i in range(len(predicted_labels)):
-            f1score += f1(predicted_labels[i], label[i])
+        for j in range(len(predicted_labels)):
+            print(predicted_labels[j])
+            print(label[j])
+            f1score += f1(predicted_labels[j], label[j])
             count += 1
 
     f1score = f1score / count
