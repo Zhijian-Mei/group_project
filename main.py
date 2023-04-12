@@ -102,7 +102,7 @@ best_f1 = 0
 
 for e in range(epoch):
     model.train()
-    for i in tqdm(train_loader):
+    for i in train_loader:
         text, label,text_length = i[0], i[1].to(device),i[2]
         input_encoding = tokenizer.batch_encode_plus(
             text,
@@ -137,7 +137,7 @@ for e in range(epoch):
     f1score = 0
     count = 0
     model.eval()
-    for i in tqdm(eval_loader):
+    for i in eval_loader:
         text, label,_ = i[0], i[1],i[2]
         input_encoding = tokenizer.batch_encode_plus(
             text,
