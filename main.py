@@ -96,7 +96,7 @@ eval_batch_size = 8
 train_loader = DataLoader(trainSet, batch_size=train_batch_size, shuffle=False)
 eval_loader = DataLoader(evalSet, batch_size=eval_batch_size)
 
-epoch = 10
+epoch = 20
 global_step = 0
 best_f1 = 0
 
