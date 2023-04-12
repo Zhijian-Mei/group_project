@@ -7,7 +7,8 @@ from tqdm import trange
 from transformers import BatchEncoding
 
 class ToxicDataset(Dataset):
-    def __init__(self,df,tokenizer,max_length=256):
+    def __init__(self,df,tokenizer,max_length=256,eval=False):
+        self.eval = eval
         self.text = list(df['text'])
         self.label = list(df['spans'])
         self.tokenizer = tokenizer
@@ -17,6 +18,10 @@ class ToxicDataset(Dataset):
 
     def __getitem__(self, idx):
         text = self.text[idx]
+        if self.eval:
+            label = self.label[idx]
+            label = [i for i in label if i != -1]
+            return text,label,len(text)
         label = FloatTensor(self.label[idx])
         return text,label,len(text)
 

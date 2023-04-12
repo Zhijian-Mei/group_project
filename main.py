@@ -90,7 +90,7 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=0.0001)
 # print(last_hidden_states.shape)
 max_length = 256
 trainSet = ToxicDataset(trainSet, tokenizer, max_length)
-evalSet = ToxicDataset(evalSet, tokenizer)
+evalSet = ToxicDataset(evalSet, tokenizer,max_length,eval=True)
 train_batch_size = 8
 eval_batch_size = 8
 train_loader = DataLoader(trainSet, batch_size=train_batch_size, shuffle=False)
@@ -171,5 +171,5 @@ for e in range(epoch):
     torch.save({'roberta': model.state_dict()}, f'checkpoint/roberta_epoch{e}.pt')
     if f1score > best_f1:
         best_f1 = f1score
-        torch.save({'roberta': model.state_dict()}, f'checkpoint/best_roberta_epoch{e}.pt')
+        torch.save({'roberta': model.state_dict()}, f'checkpoint/best_roberta_epoch{e}_f1:{best_f1}.pt')
         print('saving better checkpoint')
