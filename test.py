@@ -48,9 +48,8 @@ for i in tqdm(test_loader):
         return_tensors="pt",
     ).to(device)
 
-    results = Detoxify('unbiased').predict(text)
-    print(results)
-    quit()
+    results = Detoxify('original').predict(text)['toxicity']
+
     logits = model(input_encoding)
     predicted_token_class_ids = logits.argmax(-1)
 
@@ -68,7 +67,10 @@ for i in tqdm(test_loader):
         predicted_labels.append(label_for_char)
 
     for j in range(len(predicted_labels)):
-        f1score += f1(predicted_labels[j], label[j])
+        if results[j] > 0.5:
+            f1score += f1(predicted_labels[j], label[j])
+        else:
+            f1score += f1([], label[j])
         count += 1
 
 f1score = f1score / count
