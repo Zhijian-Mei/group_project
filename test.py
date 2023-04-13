@@ -8,7 +8,7 @@ from transformers import RobertaModel, AutoTokenizer, RobertaConfig
 from data_util import get_data, ToxicDataset
 from evaluation import f1
 from model import RobertaMLP_token
-from detoxifty import Detoxify
+from detoxify import Detoxify
 
 
 device = torch.device('cuda:7' if cuda.is_available() else 'cpu')
