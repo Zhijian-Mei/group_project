@@ -18,9 +18,6 @@ class ToxicDataset(Dataset):
 
     def __getitem__(self, idx):
         text = self.text[idx]
-        if self.eval:
-            label = self.label[idx]
-            return text,label,len(text)
         label = FloatTensor(self.label[idx])
         return text,label,len(text)
 
