@@ -32,7 +32,7 @@ checkpoint = torch.load('checkpoint/best_roberta_epoch3_f1:0.534.pt')
 model = RobertaMLP_token(roberta, config).to(device)
 model.load_state_dict(checkpoint['roberta'])
 
-
+cls = Detoxify('original')
 
 f1score = 0
 count = 0
@@ -48,7 +48,7 @@ for i in tqdm(test_loader):
         return_tensors="pt",
     ).to(device)
 
-    results = Detoxify('original').predict(text)['toxicity']
+    results = cls.predict(text)['toxicity']
 
     logits = model(input_encoding)
     predicted_token_class_ids = logits.argmax(-1)
@@ -71,6 +71,7 @@ for i in tqdm(test_loader):
             f1score += f1(predicted_labels[j], label[j])
         else:
             f1score += f1([], label[j])
+        # f1score += f1(predicted_labels[j], label[j])
         count += 1
 
 f1score = f1score / count
