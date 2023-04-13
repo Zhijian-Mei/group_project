@@ -90,7 +90,7 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=0.0001)
 # print(last_hidden_states.shape)
 max_length = 256
 trainSet = ToxicDataset(trainSet, tokenizer, max_length)
-evalSet = ToxicDataset(evalSet, tokenizer,max_length,eval=True)
+evalSet = ToxicDataset(evalSet, tokenizer,max_length)
 train_batch_size = 8
 eval_batch_size = 8
 train_loader = DataLoader(trainSet, batch_size=train_batch_size, shuffle=False)
@@ -150,7 +150,7 @@ for e in range(epoch):
 
         logits = model(input_encoding)
         predicted_token_class_ids = logits.argmax(-1)
-
+        label = label.tolist()
         predicted_labels = []
         for j in range(len(label)):
             label[j] = [it.item() for it in label[j] if it.item() != -1]

@@ -24,7 +24,7 @@ eval_batch_size = 8
 test = pd.read_csv('data/tsd_test.csv')
 print('loading test data')
 testSet = get_data(test)
-testSet = ToxicDataset(testSet, tokenizer,max_length,eval=True)
+testSet = ToxicDataset(testSet, tokenizer,max_length)
 test_loader = DataLoader(testSet, batch_size=eval_batch_size)
 
 
