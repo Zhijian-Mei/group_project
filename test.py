@@ -67,11 +67,11 @@ for i in tqdm(test_loader):
         predicted_labels.append(label_for_char)
 
     for j in range(len(predicted_labels)):
-        if results[j] > 0.5:
-            f1score += f1(predicted_labels[j], label[j])
-        else:
-            f1score += f1([], label[j])
-        # f1score += f1(predicted_labels[j], label[j])
+        # if results[j] > 0.5:
+        #     f1score += f1(predicted_labels[j], label[j])
+        # else:
+        #     f1score += f1([], label[j])
+        f1score += f1(predicted_labels[j], label[j])
         count += 1
 
 f1score = f1score / count
