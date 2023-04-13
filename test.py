@@ -64,6 +64,7 @@ for i in test_loader:
     # if len(predicted_labels) != 0:
     #     print(predicted_labels)
     for j in range(len(predicted_labels)):
+        print(text[j])
         print(predicted_labels[j])
         print(label[j])
         quit()
