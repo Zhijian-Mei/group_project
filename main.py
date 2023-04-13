@@ -48,7 +48,7 @@ def get_char_label(input_encoding,label,text_length,max_length=1024):
         golden_labels.append(label_for_char)
     return golden_labels
 
-device = torch.device('cuda:6' if cuda.is_available() else 'cpu')
+device = torch.device('cuda:7' if cuda.is_available() else 'cpu')
 
 train = pd.read_csv('data/tsd_train.csv')
 eval = pd.read_csv('data/tsd_trial.csv')
