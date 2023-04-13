@@ -48,7 +48,7 @@ for i in tqdm(test_loader):
         return_tensors="pt",
     ).to(device)
 
-    results = Detoxify('original').predict(text)
+    results = Detoxify('unbiased').predict(text)
     print(results)
     quit()
     logits = model(input_encoding)
