@@ -74,9 +74,10 @@ evalSet = get_data(eval)
 #         max_length = len(testSet['text'][i].split(' '))
 # print(max_length)
 # quit()
-config = AutoConfig.from_pretrained('bert-base-uncased')
-tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
-internal_model = AutoModel.from_pretrained('bert-base-uncased').to(device)
+model_name = 'roberta-base'
+config = AutoConfig.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+internal_model = AutoModel.from_pretrained(model_name).to(device)
 
 # for param in internal_model.parameters():
 #     param.requires_grad = False
@@ -176,8 +177,8 @@ for e in range(epoch):
 
     f1score = f1score / count
     print(f'f1_score: {f1score} at epoch {e}')
-    torch.save({'bert': model.state_dict()}, f'checkpoint/bert_epoch{e}.pt')
+    torch.save({'model': model.state_dict()}, f'checkpoint/{model_name}_epoch{e}.pt')
     if f1score > best_f1:
         best_f1 = f1score
-        torch.save({'bert': model.state_dict()}, f'checkpoint/best_bert_epoch{e}_f1:{round(best_f1,3)}.pt')
+        torch.save({'model': model.state_dict()}, f'checkpoint/best_{model_name}_epoch{e}_f1:{round(best_f1,3)}.pt')
         print('saving better checkpoint')
