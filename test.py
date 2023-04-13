@@ -28,7 +28,7 @@ testSet = ToxicDataset(testSet, tokenizer,max_length)
 test_loader = DataLoader(testSet, batch_size=eval_batch_size)
 
 
-checkpoint = torch.load('checkpoint/best_roberta_epoch2_f1:0.527.pt')
+checkpoint = torch.load('checkpoint/best_roberta_epoch3_f1:0.534.pt')
 model = RobertaMLP_token(roberta, config).to(device)
 model.load_state_dict(checkpoint['roberta'])
 
