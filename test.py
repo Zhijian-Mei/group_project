@@ -51,7 +51,7 @@ for i in test_loader:
     predicted_token_class_ids = logits.argmax(-1)
 
     predicted_labels = []
-    print(label[0])
+    print(label.shape)
     quit()
     for j in range(len(label)):
         label[j] = [it.item() for it in label[j] if it.item() != -1]
