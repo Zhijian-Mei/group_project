@@ -6,7 +6,7 @@ from tqdm import tqdm
 from data_util import get_data, ToxicDataset
 from torch import nn, cuda
 from torch.utils.data import DataLoader
-from transformers import RobertaModel, RobertaConfig, AutoTokenizer, RobertaForTokenClassification
+from transformers import RobertaModel, RobertaConfig, AutoTokenizer, RobertaForTokenClassification,AutoModel
 from transformers import AutoConfig, AutoModelForTokenClassification
 from model import *
 from evaluation import f1
@@ -74,12 +74,13 @@ evalSet = get_data(eval)
 #         max_length = len(testSet['text'][i].split(' '))
 # print(max_length)
 # quit()
-config = RobertaConfig()
-tokenizer = AutoTokenizer.from_pretrained('roberta-base')
-roberta = RobertaModel.from_pretrained('roberta-base').to(device)
-for param in roberta.parameters():
+config = AutoConfig().from_pretrained('bert-base-uncased')
+tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
+internal_model = AutoModel.from_pretrained('bert-base-uncased').to(device)
+
+for param in internal_model.parameters():
     param.requires_grad = False
-model = RobertaMLP_token(roberta, config).to(device)
+model = RobertaMLP_token(internal_model, config).to(device)
 
 optimizer = torch.optim.AdamW(model.parameters(), lr=0.0001)
 # inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
@@ -175,8 +176,8 @@ for e in range(epoch):
 
     f1score = f1score / count
     print(f'f1_score: {f1score} at epoch {e}')
-    torch.save({'roberta': model.state_dict()}, f'checkpoint/roberta_epoch{e}.pt')
+    torch.save({'bert': model.state_dict()}, f'checkpoint/bert_epoch{e}.pt')
     if f1score > best_f1:
         best_f1 = f1score
-        torch.save({'roberta': model.state_dict()}, f'checkpoint/best_roberta_epoch{e}_f1:{round(best_f1,3)}.pt')
+        torch.save({'bert': model.state_dict()}, f'checkpoint/best_bert_epoch{e}_f1:{round(best_f1,3)}.pt')
         print('saving better checkpoint')
