@@ -30,14 +30,14 @@ class RobertaMLP_token(nn.Module):
         super().__init__()
         self.model = Roberta_model
         self.num_labels = 2
-        self.up = nn.Linear(config.hidden_size,512)
-        self.down = nn.Linear(512,self.num_labels)
+        self.up = nn.Linear(config.hidden_size,self.num_labels)
+
 
 
     def forward(self,text,labels=None):
         x = self.model(text['input_ids'],text['attention_mask']).last_hidden_state
-        x =  self.up(x)
-        logits = self.down(x)
+        logits =  self.up(x)
+
 
         loss_fct = CrossEntropyLoss(ignore_index=-100)
 
