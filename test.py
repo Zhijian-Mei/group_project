@@ -53,7 +53,7 @@ for i in test_loader:
     predicted_labels = []
     label = label.tolist()
     for j in range(len(label)):
-        label[j] = [it for it in label[j] if it != -1]
+        label[j] = [int(it) for it in label[j] if it != -1]
     for j in range(input_encoding['input_ids'].shape[0]):
         label_for_char = []
         for k in range(1, max_length):
