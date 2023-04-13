@@ -74,7 +74,7 @@ evalSet = get_data(eval)
 #         max_length = len(testSet['text'][i].split(' '))
 # print(max_length)
 # quit()
-config = AutoConfig().from_pretrained('bert-base-uncased')
+config = AutoConfig.from_pretrained('bert-base-uncased')
 tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
 internal_model = AutoModel.from_pretrained('bert-base-uncased').to(device)
 
