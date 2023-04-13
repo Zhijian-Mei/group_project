@@ -92,8 +92,8 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=0.0001)
 max_length = 256
 trainSet = ToxicDataset(trainSet, tokenizer, max_length)
 evalSet = ToxicDataset(evalSet, tokenizer,max_length)
-train_batch_size = 8
-eval_batch_size = 8
+train_batch_size = 32
+eval_batch_size = 32
 train_loader = DataLoader(trainSet, batch_size=train_batch_size, shuffle=False)
 eval_loader = DataLoader(evalSet, batch_size=eval_batch_size)
 
