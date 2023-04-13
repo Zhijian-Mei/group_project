@@ -20,7 +20,7 @@ config = RobertaConfig()
 tokenizer = AutoTokenizer.from_pretrained('roberta-base')
 roberta = RobertaModel.from_pretrained('roberta-base').to(device)
 
-eval_batch_size = 2
+eval_batch_size = 8
 test = pd.read_csv('data/tsd_test.csv')
 print('loading test data')
 testSet = get_data(test)
@@ -28,7 +28,7 @@ testSet = ToxicDataset(testSet, tokenizer,max_length,eval=True)
 test_loader = DataLoader(testSet, batch_size=eval_batch_size)
 
 
-checkpoint = torch.load('checkpoint/best_roberta_epoch4_f1:0.084.pt')
+checkpoint = torch.load('checkpoint/roberta_epoch19.pt')
 model = RobertaMLP_token(roberta, config).to(device)
 model.load_state_dict(checkpoint['roberta'])
 
@@ -63,8 +63,7 @@ for i in tqdm(test_loader):
                 for position in range(start, end):
                     label_for_char.append(position)
         predicted_labels.append(label_for_char)
-    # if len(predicted_labels) != 0:
-    #     print(predicted_labels)
+
     for j in range(len(predicted_labels)):
         f1score += f1(predicted_labels[j], label[j])
         count += 1
