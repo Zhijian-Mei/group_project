@@ -78,8 +78,8 @@ config = AutoConfig.from_pretrained('bert-base-uncased')
 tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
 internal_model = AutoModel.from_pretrained('bert-base-uncased').to(device)
 
-for param in internal_model.parameters():
-    param.requires_grad = False
+# for param in internal_model.parameters():
+#     param.requires_grad = False
 model = RobertaMLP_token(internal_model, config).to(device)
 
 optimizer = torch.optim.AdamW(model.parameters(), lr=0.0001)
