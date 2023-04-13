@@ -2,6 +2,7 @@ import pandas as pd
 import torch
 from torch import cuda
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 from transformers import RobertaModel, AutoTokenizer, RobertaConfig
 
 from data_util import get_data, ToxicDataset
@@ -36,7 +37,7 @@ model.load_state_dict(checkpoint['roberta'])
 f1score = 0
 count = 0
 model.eval()
-for i in test_loader:
+for i in tqdm(test_loader):
     text, label, _ = i[0], i[1], i[2]
     input_encoding = tokenizer.batch_encode_plus(
         text,
