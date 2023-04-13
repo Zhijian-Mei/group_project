@@ -96,6 +96,11 @@ eval_batch_size = 8
 train_loader = DataLoader(trainSet, batch_size=train_batch_size, shuffle=False)
 eval_loader = DataLoader(evalSet, batch_size=eval_batch_size)
 
+print('loading test data')
+testSet = get_data(test)
+testSet = ToxicDataset(testSet, tokenizer,max_length)
+test_loader = DataLoader(testSet, batch_size=eval_batch_size)
+
 epoch = 20
 global_step = 0
 best_f1 = 0
@@ -137,7 +142,7 @@ for e in range(epoch):
     f1score = 0
     count = 0
     model.eval()
-    for i in eval_loader:
+    for i in test_loader:
         text, label,_ = i[0], i[1],i[2]
         input_encoding = tokenizer.batch_encode_plus(
             text,
