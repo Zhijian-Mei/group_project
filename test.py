@@ -8,7 +8,7 @@ from transformers import RobertaModel, AutoTokenizer, RobertaConfig
 from data_util import get_data, ToxicDataset
 from evaluation import f1
 from model import RobertaMLP_token
-
+from detoxifty import Detoxify
 
 
 device = torch.device('cuda:7' if cuda.is_available() else 'cpu')
@@ -28,7 +28,7 @@ testSet = ToxicDataset(testSet, tokenizer,max_length)
 test_loader = DataLoader(testSet, batch_size=eval_batch_size)
 
 
-checkpoint = torch.load('checkpoint/roberta_epoch19.pt')
+checkpoint = torch.load('checkpoint/best_roberta_epoch2_f1:0.527.pt')
 model = RobertaMLP_token(roberta, config).to(device)
 model.load_state_dict(checkpoint['roberta'])
 
@@ -48,6 +48,9 @@ for i in tqdm(test_loader):
         return_tensors="pt",
     ).to(device)
 
+    results = Detoxify('original').predict(text)
+    print(results)
+    quit()
     logits = model(input_encoding)
     predicted_token_class_ids = logits.argmax(-1)
 
