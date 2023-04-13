@@ -153,7 +153,7 @@ for e in range(epoch):
         label = label.tolist()
         predicted_labels = []
         for j in range(len(label)):
-            label[j] = [it.item() for it in label[j] if it.item() != -1]
+            label[j] = [int(it) for it in label[j] if it != -1]
         for j in range(input_encoding['input_ids'].shape[0]):
             label_for_char = []
             for k in range(1, max_length):
