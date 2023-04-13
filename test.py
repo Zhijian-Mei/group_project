@@ -19,7 +19,7 @@ config = RobertaConfig()
 tokenizer = AutoTokenizer.from_pretrained('roberta-base')
 roberta = RobertaModel.from_pretrained('roberta-base').to(device)
 
-eval_batch_size = 8
+eval_batch_size = 2
 test = pd.read_csv('data/tsd_test.csv')
 print('loading test data')
 testSet = get_data(test)
@@ -51,7 +51,8 @@ for i in test_loader:
     predicted_token_class_ids = logits.argmax(-1)
 
     predicted_labels = []
-    print(label[0])
+    print(label)
+    quit()
     for j in range(len(label)):
         label[j] = [it.item() for it in label[j] if it.item() != -1]
     for j in range(input_encoding['input_ids'].shape[0]):
