@@ -21,6 +21,7 @@ def get_args():
     parser.add_argument('--model', type=str, required=True)
     parser.add_argument('--batch_size', type=int, default=8)
     parser.add_argument('--gpu', type=str, required=True)
+    parser.add_argument('--freeze', type=bool, default=False)
     args = parser.parse_args()
     return args
 
@@ -96,9 +97,9 @@ if __name__ == '__main__':
     config = AutoConfig.from_pretrained(model_name)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     internal_model = AutoModel.from_pretrained(model_name).to(device)
-
-    # for param in internal_model.parameters():
-    #     param.requires_grad = False
+    if args.freeze:
+        for param in internal_model.parameters():
+            param.requires_grad = False
     model = RobertaMLP_token(internal_model, config).to(device)
 
     optimizer = torch.optim.AdamW(model.parameters(), lr=0.0001)
