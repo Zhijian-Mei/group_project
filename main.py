@@ -91,6 +91,7 @@ if __name__ == '__main__':
     # print(max_length)
     # quit()
     model_name = args.model
+    print(f'Backbone model name: {model_name}')
     config = AutoConfig.from_pretrained(model_name)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     internal_model = AutoModel.from_pretrained(model_name).to(device)
