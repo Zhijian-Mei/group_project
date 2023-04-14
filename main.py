@@ -14,6 +14,7 @@ from model import *
 from evaluation import f1
 
 
+
 def get_args():
     parser = argparse.ArgumentParser()
 
@@ -126,7 +127,7 @@ if __name__ == '__main__':
 
     for e in range(epoch):
         model.train()
-        for i in train_loader:
+        for i in tqdm(train_loader,mininterval=200):
             text, label, text_length = i[0], i[1].to(device), i[2]
             input_encoding = tokenizer.batch_encode_plus(
                 text,
@@ -159,7 +160,7 @@ if __name__ == '__main__':
         f1score = 0
         count = 0
         model.eval()
-        for i in test_loader:
+        for i in tqdm(test_loader,mininterval=200):
             text, label, _ = i[0], i[1], i[2]
             input_encoding = tokenizer.batch_encode_plus(
                 text,
