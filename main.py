@@ -194,7 +194,7 @@ if __name__ == '__main__':
 
         f1score = f1score / count
         print(f'f1_score: {f1score} at epoch {e}')
-        torch.save({'model': model.state_dict()}, f'checkpoint/{model_name}_epoch{e}.pt')
+        torch.save({'model': model.state_dict()}, f"checkpoint/{model_name}_epoch{e}_{'freeze' if args.freeze else 'unfreeze'}.pt")
         if f1score > best_f1:
             best_f1 = f1score
             torch.save({'model': model.state_dict()},
