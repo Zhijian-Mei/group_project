@@ -65,6 +65,7 @@ def get_char_label(input_encoding, label, text_length, max_length=1024):
 
 if __name__ == '__main__':
     args = get_args()
+    print(args)
     gpu = args.gpu
     device = torch.device(f'cuda:{gpu}' if cuda.is_available() else 'cpu')
 
