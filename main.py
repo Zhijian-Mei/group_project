@@ -198,5 +198,5 @@ if __name__ == '__main__':
         if f1score > best_f1:
             best_f1 = f1score
             torch.save({'model': model.state_dict()},
-                       f'checkpoint/best_{model_name}_epoch{e}_f1:{round(best_f1, 3)}.pt')
+                       f"checkpoint/best_{model_name}_epoch{e}_f1:{round(best_f1, 3)}_{'freeze' if args.freeze else 'unfreeze'}.pt")
             print('saving better checkpoint')
