@@ -3,7 +3,7 @@ import torch
 from torch import cuda
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import RobertaModel, AutoTokenizer, RobertaConfig
+from transformers import RobertaModel, AutoTokenizer, RobertaConfig, AutoConfig, AutoModel
 
 from data_util import get_data, ToxicDataset
 from evaluation import f1
@@ -16,9 +16,10 @@ device = torch.device('cuda:7' if cuda.is_available() else 'cpu')
 
 
 max_length = 256
-config = RobertaConfig()
-tokenizer = AutoTokenizer.from_pretrained('roberta-base')
-roberta = RobertaModel.from_pretrained('roberta-base').to(device)
+model_name = 'bert-base-uncased'
+config = AutoConfig.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+internal_model = AutoModel.from_pretrained(model_name).to(device)
 
 eval_batch_size = 16
 test = pd.read_csv('data/tsd_test.csv')
@@ -29,7 +30,7 @@ test_loader = DataLoader(testSet, batch_size=eval_batch_size)
 
 
 checkpoint = torch.load('checkpoint/best_bert-base-uncased_epoch0_f1:0.65.pt')
-model = RobertaMLP_token(roberta, config).to(device)
+model = RobertaMLP_token(internal_model, config).to(device)
 model.load_state_dict(checkpoint['model'])
 
 # cls = Detoxify('original')
