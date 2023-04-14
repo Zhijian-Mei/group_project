@@ -20,7 +20,7 @@ config = RobertaConfig()
 tokenizer = AutoTokenizer.from_pretrained('roberta-base')
 roberta = RobertaModel.from_pretrained('roberta-base').to(device)
 
-eval_batch_size = 8
+eval_batch_size = 16
 test = pd.read_csv('data/tsd_test.csv')
 print('loading test data')
 testSet = get_data(test)
@@ -28,11 +28,11 @@ testSet = ToxicDataset(testSet, tokenizer,max_length)
 test_loader = DataLoader(testSet, batch_size=eval_batch_size)
 
 
-checkpoint = torch.load('checkpoint/best_roberta_epoch3_f1:0.534.pt')
+checkpoint = torch.load('checkpoint/best_bert-base-uncased_epoch0_f1:0.65.pt')
 model = RobertaMLP_token(roberta, config).to(device)
-model.load_state_dict(checkpoint['roberta'])
+model.load_state_dict(checkpoint['model'])
 
-cls = Detoxify('original')
+# cls = Detoxify('original')
 
 f1score = 0
 count = 0
@@ -48,7 +48,7 @@ for i in tqdm(test_loader):
         return_tensors="pt",
     ).to(device)
 
-    results = cls.predict(text)['toxicity']
+    # results = cls.predict(text)['toxicity']
 
     logits = model(input_encoding)
     predicted_token_class_ids = logits.argmax(-1)
