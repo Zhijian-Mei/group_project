@@ -21,7 +21,7 @@ def get_args():
     parser.add_argument('--model', type=str, required=True)
     parser.add_argument('--batch_size', type=int, default=8)
     parser.add_argument('--gpu', type=str, required=True)
-    parser.add_argument('--freeze', type=bool, default=False)
+    parser.add_argument('--freeze', type=int, default=0)
     args = parser.parse_args()
     return args
 
@@ -98,7 +98,7 @@ if __name__ == '__main__':
     config = AutoConfig.from_pretrained(model_name)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     internal_model = AutoModel.from_pretrained(model_name).to(device)
-    if args.freeze:
+    if args.freeze == 1:
         for param in internal_model.parameters():
             param.requires_grad = False
     model = RobertaMLP_token(internal_model, config).to(device)
@@ -195,9 +195,9 @@ if __name__ == '__main__':
 
         f1score = f1score / count
         print(f'f1_score: {f1score} at epoch {e}')
-        torch.save({'model': model.state_dict()}, f"checkpoint/{model_name}_epoch{e}_{'freeze' if args.freeze else 'unfreeze'}.pt")
+        torch.save({'model': model.state_dict()}, f"checkpoint/{model_name}_epoch{e}_{'freeze' if args.freeze == 1 else 'unfreeze'}.pt")
         if f1score > best_f1:
             best_f1 = f1score
             torch.save({'model': model.state_dict()},
-                       f"checkpoint/best_{model_name}_epoch{e}_f1:{round(best_f1, 3)}_{'freeze' if args.freeze else 'unfreeze'}.pt")
+                       f"checkpoint/best_{model_name}_epoch{e}_f1:{round(best_f1, 3)}_{'freeze' if args.freeze == 1 else 'unfreeze'}.pt")
             print('saving better checkpoint')
