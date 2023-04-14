@@ -48,7 +48,7 @@ def get_char_label(input_encoding,label,text_length,max_length=1024):
         golden_labels.append(label_for_char)
     return golden_labels
 
-device = torch.device('cuda:7' if cuda.is_available() else 'cpu')
+device = torch.device('cuda:5' if cuda.is_available() else 'cpu')
 
 train = pd.read_csv('data/tsd_train.csv')
 eval = pd.read_csv('data/tsd_trial.csv')
@@ -74,7 +74,7 @@ evalSet = get_data(eval)
 #         max_length = len(testSet['text'][i].split(' '))
 # print(max_length)
 # quit()
-model_name = 'roberta-base'
+model_name = 'bert-base-uncased'
 config = AutoConfig.from_pretrained(model_name)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 internal_model = AutoModel.from_pretrained(model_name).to(device)
